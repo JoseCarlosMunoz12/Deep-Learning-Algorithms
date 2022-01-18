@@ -1,3 +1,63 @@
 January 16, 2022
+Intro To Advance Algorithm in DL
+Algos use in Deep Learning
+Algos about optimization . Deep learning same, but specific pnes
+Python with Tensor and Ketra
+6 HW
+All hw posted on FR, paper and pencil HW
+one file for HW
+3 exams open book
+3 extensive programming HW
+6 HW assignment
+Using python 3.8
+Neural Networks and deep Lerning, Charu Aggarwal
+TensorFlow/Keras
+PyCharms IDE is reccomended
+Anaconda is highly recommended
+REMEMBER WHAT INTERPERTER CREATED AND STICK TO THAT
+Tensorflow and Ketra own language
 Week 1-1
 Perceptrons
+Basic Archtecture-Perceptron
+Neural Network- Any Alg that has parameters , tunable.
+ex.
+An array of input X
+a weight Parameters W
+y = A(I | W)
+first steps is to find W parametsrs. Giving from a set of Examples
+an input of a known X will give and known Y (usually one number)
+Calculate output of X and get a Y^.
+y is known result, Y^ is the calculated result
+Y^ is usually not y.
+there is a L(y,Y^), a Loss Function. usually a subtraction but can be something else
+Best scenerio is when Loss is 0. So we have to minimize Loss and that changes our Parameters.
+These new Parameters will be used now
+Continue until Loss is 0 for all known X
+//
+Deep Learning
+Loss, Parameters, Adjustable
+//
+Alg written Locally
+summation is locally
+Activation is global
+X-E-e^n
+local differentianion, if Global, then hae a huge dimmension of L(y,Y^)
+First Neural Network (local)
+Perceptrion
+Input is a Vector X. 
+W wights, also a vector
+// X = <x_0, x_1,.., x_n>
+// W = <w_0. w_1..., w_n>
+X * W = y
+  1 if sign(X*W - b) > 0
+ -1 if sign(X*W - b) <=0
+W` = < b W>
+X` = < 1 x>
+so X`* W` = y
+this is a perceptron with bias
+Naive Intepreation
+Each example there is an Error, E(X) = ( y - Y^)
+W = W` + a * E(X) * X`
+a is a learning rate
+XOR is  not learnable for a perceptron
+
