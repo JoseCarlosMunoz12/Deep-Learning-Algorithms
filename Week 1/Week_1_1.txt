@@ -60,4 +60,9 @@ Each example there is an Error, E(X) = ( y - Y^)
 W = W` + a * E(X) * X`
 a is a learning rate
 XOR is  not learnable for a perceptron
-
+surrogte loss function work as well as the derivatie of the Loss function
+Construct netwerok of input X, W, Sum and then some function (phi)
+pre activation is value of X*W = a. then phi(y) for post activation value
+ativation fuctions
+phi(v) = v
+phi(v) = sign(v)
