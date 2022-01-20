@@ -1,0 +1,87 @@
+January 20, 2022
+Neural Networks, Terminology
+NN are like graphs. Nodes(neurons) go into layer, to next layer, etc
+Multilayer Nerual Networks
+Nodes do summation and activation functions
+NN may use nerons with w/o constant Bias
+Bias can be used in both hidden and output layers
+NN defined by
+1) Layers
+2) Number and type of nodes in each layer
+3)The loss functions that is optimized in the output layer
+Passing Layer to layer output
+Keep going until the output layer
+At end check Actual and what we Got, and use Loss Function to see how diff it is.
+What is it actually is?
+Like a Matrix
+<X`> * [X` x a`] * [a`x b`] * [b` x y] => y
+ex
+<5>*[5x3]*[3x3]*[3x1] => [1]
+But since its a Matrix, must be done in Backwards
+[1x3][3x3][3x5][5x1]
+L_2 *L_1*L_0*X`
+or Transposed
+[1x5][5x3][3x3][3x1]
+[1x3][3x3][3x1]
+[1x3][3x1]
+[1x1]
+//
+Each time we multipy the W matrix, we then apply activation function
+Aply, Elemnt by element
+Phi(<X>)
+Notes
+1)all neurons in one layer have the same activation function. Rarely violated
+2) some activation Functions (PHI) naturaly hace vector arguments
+Activation Example
+v = W^T *x
+ReLU = Max(0,X)
+PHI_n(v)
+As an example
+W^T * x = v 
+then 
+PHI(v) = v` 
+v is input to activation function/layer
+St0p Function either a x > 0 ? 1:-1
+Linear x => x
+this is the forward step of the whole thing
+Activation int output layer depends on the type of output
+NN modeling distribution of events
+Does logistic regression at the end
+Hidden Layer Activations are almost always nonlinear
+Hidden Nerons always use same function over the entire layer
+NN can't do infinite num of outcomes, only finite set
+not outcome but probility of out come
+LOSS Functions, we are going to use, <x`,y>
+y^ = ANN(x`)
+Loss = y - y^
+for non numbers
+y^ is the prob of even
+Loss = -log(y^) for probibilistic outcomes
+//
+all Hiden layers are non lnear
+early Layers learn atomic features, later layers learn complex features
+First layers simple features,
+then elemntary features
+then complex features
+the finaly classify
+///
+Gradien Based Optimization
+
+f(x + e) ~ f(x) + e * df(x) /dx
+df(x)/dx =0 are stationary points: min, max, and saddle points
+f(x - e * sign(df(x)/dx)) is less than f(x) for small enough e
+Main idea of Gradient Descent
+NN just takes derivative
+Our function , the LOSS, has only a minium. Rarely if ever some saddle points
+NN applies Chain Rule
+for Func with Multiple input, we need partia derivatives of each item of the Loss Function
+df/dx = df/dy * dy/dx
+this is for one coordinates
+we will have a lot of coordinates
+Del_x F(x).
+df/dx but for all of the coordinates
+df/du/ given f(x,y,z) = 3x^2 - 2xy + 4z^2
+x(y,v) = e^(u*sin v)
+y(u,v) = e^(u * cos v)
+z = e^u2
+
