@@ -1,2 +1,47 @@
 January 25, 2022
-
+Back propogation
+Training NN
+Data Set and Network Weights
+a Set = { X,y}
+a tensor is a multidimensional array
+each layer a vectors coming in to each neuron. For the Layer we N neurons.
+We have X Layer
+So a multidimensional Array
+L_cum(S) = sum L(y^, y). Goal is to get the minium Loss function value L for the set of training Example S
+////
+Idea of Backpropegation
+for ii in range ( 0, n):
+1) calc y^, feed it forward wit Weights W
+2) Comepute Loss Functions
+3) Conpute the Gradient for each parameters
+4) recompute new set of Weights
+until W_new = W i.e. no chang of Weights
+SSE = Sum of Square Error
+del L = (parameters of the weights)^T
+compute guy at the points
+apply chain rule
+see notes
+///
+if the w y don't depends on the w_n, then its 0
+anythin tha goes beyond the graph of computation, y_c does not depend on it. Anything before, it does depend on it
+The Graph explicitly shows what wegihts will depend on what.
+Algorith anaylzes the graph to get the values
+That is what Tensor flow does
+The functions are well known and easily just plug in
+THis is just one Cycle
+Basic method.
+///
+other optimizations are adjusmant to these methods
+///
+Computational Graphs
+A better graph than these.
+CG are an algorithm. Has a Loss function that is differentiable
+//
+CGL
+Directed labeled graphs
+nodes labaled by a pair (x, op) where
+x is a variable, op is an operation
+Variables may have types. Scala, vector, matrix, k-dimensional tensor
+operation are symmetri cfunc w/ arguments
+NN clearly can be compute to a CH, in which each neurons can be represnted as  unit of computatoin
+operations are scalar, vector, Matrix and sigmoid, tanh, hard tanh, ReLU, Softmax, 
