@@ -44,4 +44,10 @@ x is a variable, op is an operation
 Variables may have types. Scala, vector, matrix, k-dimensional tensor
 operation are symmetri cfunc w/ arguments
 NN clearly can be compute to a CH, in which each neurons can be represnted as  unit of computatoin
-operations are scalar, vector, Matrix and sigmoid, tanh, hard tanh, ReLU, Softmax, 
+operations are scalar, vector, Matrix and sigmoid, tanh, hard tanh, ReLU, Softmax,
+Back Propagation 2
+//
+Each hidden layer has its own matrix
+reversing the graph will give us the values
+Need a gradient table for it
+
