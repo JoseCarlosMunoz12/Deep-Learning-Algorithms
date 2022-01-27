@@ -1,2 +1,68 @@
 January 27, 2022
+wekk 2-2
+Perceptron Revisited
+Overfitted vs underfitting
+OF,
+fitting model != good prediction
+Data trained set might be too small and model didn't generalize to data
+UF,
+Gap bte performance on trainin dat and Tes data is generalize but error are relativly big
+Bias vs Variance
+our set has a X data points(x^) witha Y range of results
+{x^,y}
+there is distribution, frequency of each x^ and y.
+There is an expectation, from the data, since we have random the function is on average to it
+There is an expectation of y^ based on the data set
+//
+Our assumption, that there is a true function of y =f(x^) + b
+the noise mean is 0.
+Now we can look at how good the model is now
+E(y - y^) = E((g(x) + e - f(x,D))^2)
+this can be writte in 3 components
+E() = BIAS(f(x,D)) + VAR(f(x,D)) + noise
+BIAS = estimator of what is should be, tells how much it misses our main target
+VAR = how wider or narrowe the differences btween estimates are, this is about the estimator
+----------------------------------------------
+Overfitted data has low bias but high variance
+Underfitted data has high bias low variance
+//
+Underfitted means that it wasn't trained enough
+===========================================
+Regularization, need to modify to reduce its generalization error but not its training error
+This is used to adress ovefitted 
+Must be chosen with prior assumtions for a specific task at hand
+Can be viwed as part of the loss function
+2 main ways
+Small Values, penalize big number of parameters
+penalizing big values of parameters. Parameters are weights.
+add some portin of the W to the gradient.
+Set some to values to 0. Drop one of the links when its 0
+Differnet type of regularization depend onth degrees
+if its a euclidean distance, L^2.
+Usually called Weight decay.
+Regularization can be intepreted as is gradual forgetting less important patterns.
+Best use this for complex models instead of simpler models
+================================
+Neuron Variety
+Building Blocks of the network
+1* a standard perceptrion
+Standard models in ML.Regression. Log Regression, SVM, LDA, Hyperbolic Tan, soft max
+Reg is linear, but log is not,
+Linear Regression
+Y = W * X
+W = (X^T * X) * X^T * Y
+On each in coming functions. Loss
+Linear Regreession with Regularization
+L = 0.5[ (y - y^)^2 - lambda * w*w]
+this is a euclidian norm
+Note: use this instead of a step function.
+this is square a least square classification
+Logistic Regression
+Idea we have 2 events that could come out.
+one has a probability of p other is 1 -p
+find ratio of it. if value >1, then +1 happend, if <1, then its -1
+use log because it allows to use addition , much easier
+assumse log these thing is related to W*X
+ therfore p = e^(wx) / (1 + e^(wx)) = 1 / (1 + e ^(-wx)).
+ if value > 0.5 its 1, else its -1
 
