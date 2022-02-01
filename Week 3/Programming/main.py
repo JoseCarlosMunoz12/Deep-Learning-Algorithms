@@ -42,3 +42,10 @@ print('y=', y)
 c = x * y
 print('product c=', c)
 
+print(e.get_shape())
+print(e)
+c1 = tf.reduce_sum(e)
+print(c1)
+
+e_values, e_vectors = tf.linalg.eigh(y)
+print(e_values)
