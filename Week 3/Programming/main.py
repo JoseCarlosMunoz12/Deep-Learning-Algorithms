@@ -23,7 +23,7 @@ print(tens_3d[1, 1, 0])
 
 real = tf.constant([2.25, 3.25])
 imag = tf.constant([4.75, 5.75])
-y = tf.complex( real, imag)
+y = tf.complex(real, imag)
 print(y)
 
 b = tf.constant([1, 2])
@@ -31,3 +31,14 @@ Al = tf.constant([[2, 24], [2, 26], [2, 57]])
 x = [[1, 2, 3]]
 Cl = tf.matmul(x, Al) + b
 print(Cl)
+
+y = x @ Al + b
+print(y)
+
+x = tf.constant([[1], [2], [3]])
+print('x=', x)
+y = tf.range(1, 5)
+print('y=', y)
+c = x * y
+print('product c=', c)
+
