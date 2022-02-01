@@ -35,6 +35,49 @@
 \end{center}
 %===============================
 ex1)\\
-s\\
+We assume that in this Neural Network that there is a hidden layer and an output layer. The Hidden layer will contain 2 nodes used to get a preactivation values. The ReLU will be used to get the representation of \\
 ex4)\\
+\begin{equation}
+\begin{array}{c|cc|c}
+ & X_1 &  X_2  & Y\\
+\hline
+a_0 &-1 & -1 & -1\\
+\hline
+a_1& 1 &  1  & -1\\
+\hline
+a_2 & 1 & -1 & 1\\
+\hline
+a_3& -1 & 1  & 1\\
+\end{array}
+\end{equation}
+The Starting $\vec{w}$ is $\{0,0\}$ with an $\alpha = 1$\\
+Step 1)
+\begin{equation}\tag{1}
+\begin{split}
+\vec{w}_{1} &= \vec{w}_0+ \alpha * (-1) *a_0\\
+&= \{1,1\}
+\end{split}
+\end{equation}
+Step 2)
+\begin{equation}\tag{1}
+\begin{split}
+\vec{w}_{2} &= \vec{w}_1+ \alpha * (-1) *a_1\\
+&= \{2,2\}
+\end{split}
+\end{equation}
+Step 3)\\
+\begin{equation}\tag{3}
+\begin{split}
+\vec{w}_{3} &= \vec{w}_2+ \alpha * (1) *a_2\\
+&= \{3,1\}
+\end{split}
+\end{equation}
+Step 4)\\
+\begin{equation}\tag{4}
+\begin{split}
+\vec{w}_{4} &= \vec{w}_3+ \alpha * (1) *a_3\\
+&= \{2,2\}
+\end{split}
+\end{equation}
+After a few Cycles, we see that it will not converge at all. This is because these points can not be linearly seperated
 \end{document}
