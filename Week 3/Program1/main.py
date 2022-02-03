@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-
+from Neuron_Class import Neuron
 # A = tf.Variable([[3, 2], [5, 2]])
 # B = tf.constant([[9, 5], [1, 3]])
 # AB_con = tf.concat(values=[A, B], axis=1)
@@ -36,16 +36,17 @@ import numpy as np
 
 # functions in tensor flow
 
-W = tf.Variable(tf.ones(shape=[2, 2]), name='W')
-b = tf.Variable(tf.ones(shape=2), name='b')
+# W = tf.Variable(tf.ones(shape=[2, 2]), name='W')
+# b = tf.Variable(tf.ones(shape=2), name='b')
 
 
-@tf.function
-def forward(x):
-    s = tf.linalg.matvec(W, x) + b
-    return s
+# @tf.function
+# def forward(x):
+#    s = tf.linalg.matvec(W, x) + b
+#    return s
 
 
-out_a = forward(tf.constant([1.0, 1.0], shape=2))
+# out_a = forward(tf.constant([1.0, 1.0], shape=2))
 
-print(out_a)
+
+r = Neuron()
