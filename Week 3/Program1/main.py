@@ -1,6 +1,11 @@
 import tensorflow as tf
 import numpy as np
+import math
+import os
+from numpy.random import default_rng
+
 from Neuron_Class import Neuron
+
 # A = tf.Variable([[3, 2], [5, 2]])
 # B = tf.constant([[9, 5], [1, 3]])
 # AB_con = tf.concat(values=[A, B], axis=1)
@@ -48,5 +53,24 @@ from Neuron_Class import Neuron
 
 # out_a = forward(tf.constant([1.0, 1.0], shape=2))
 
+base_dir = os.getcwd() + '\\data'
 
-r = Neuron()
+fName = input('Enter a filename (must be in the standard working folder')
+file = os.path.join(base_dir, fName)
+try:
+    data = open(file, 'r')
+    ferror = True
+except FileNotFoundError:
+    ferror = False
+if ferror:
+    rep = True
+    while rep:
+        fName1 = 'q'
+        if fName1 == 'q':
+            exit()
+        else:
+            try:
+                data = open(fName1, 'r')
+                rep = False
+            except:
+                print('incorrect file name')
