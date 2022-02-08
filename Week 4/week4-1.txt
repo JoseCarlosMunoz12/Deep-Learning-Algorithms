@@ -1,3 +1,42 @@
 Februrary, 8, 2022
 Week 4 lesson 1
-
+Loss/Gradient of Basic Environement
+Today, Some calculus and probability. Linear algebra as well
+All we are doing is Fedforward networks.
+Look at models we create by it
+Essentially, 
+Some distribution  D on (x, y)
+there is a function but there is noise. Therefore a distribution
+we make a model to compute the value of our y^ corresponding to our target variable
+we essentially calcute the probabily that our value will be in our distribution
+P_{model}(y^|X,thete)
+given our parameter we get some value by half.
+want to have the differnet between the two.
+P_D(y|x) - P_M(y,x^,thete)
+becasue probability, we calculate the Expected value
+E_{x~d}(P_D(x^)) - P_M(x^)) to be as small we can
+Minimize the expectatin
+use logs for techincal reason. cause easier to do sums than multiplication
+---
+we don't need to compare P_D so it is fixed and we can forget about it
+leaves us -log(P_M), this is just cross entropy between distribution
+Cross entropy, difference what we know and what we want to fix
+//-----
+comes becase we want to minimize it
+we want the best value of our thete, our parameters
+theta = argmax E(p_M(y,x;thete)
+maximum likelyhood estimate.
+//==
+want maximum distribution of y we computed
+p(y|f(x^,theta))
+//==
+normalize data from the start
+//==
+Loss Funcion ther are 3 types of loss functions. Regression binary, and multiclass classification
+Regression, assume normal Disrtibution
+distributed with Laplcae
+0.5 * b^-1 exp(-(y-y^)/b)
+most of time assume normal distribution, use sme
+Binary Classification max likehoold yield
+plogp^ + (1-p)log(1-p^)
+multiclass yields -log(y^)
