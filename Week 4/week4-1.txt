@@ -40,3 +40,12 @@ most of time assume normal distribution, use sme
 Binary Classification max likehoold yield
 plogp^ + (1-p)log(1-p^)
 multiclass yields -log(y^)
+probability of true class with given value
+//==
+Loss function table will be used. All of these are enough to use
+its gonna be one of these at the end. So the loss, will be one of the from the table
+Gradients of these as well. will be used for the activation function
+//==
+After each value calculated, its passed to the previous node. Back propagatin
+//==
+
