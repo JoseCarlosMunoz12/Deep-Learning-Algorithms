@@ -57,3 +57,22 @@ Look at page 22 to see all the standard cases for forwared and backward
 //=======
 These are basic function for the back propagation
 //
+Batch Learning.
+Train one record at a time. called online learning. Mostly used when dta is coming in real time
+Batch training
+train many recoreds at an instance.
+Stochasitc Gradient descent. Randomly choose any of the points and train. 
+Stochastic Sampling. Sample first few and train it.
+Replacement Sampling. same as sample but return data sampled
+training one bactch is calle an iteration
+full data is called an epoch
+//=====
+Loss Function in Batch learning.
+use mean square error. add all and get the mean. Sometimes its total squared error
+for all update, we use the same result of gradient descent
+Multiclass perceptron. many layer of many perceptron
+Perceptron, linearly seperates points.
+Idea: point belongs to class with the biggest distance of w * x
+Softmax is most. if multiclass softmax, real numbers, regression, if probability , sigmoid
+all can be made form ReLu, sigmoid and Softmax
+
