@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tensorflow import keras
+import tensorflow.keras as keras
 import numpy as np
 
 
@@ -39,7 +39,7 @@ class NewModel(tf.Module):
 
 class Linear(keras.layers.Layer):
     def __init__(self, units=32, input_dim=32):
-        super(Linear, self).__init()
+        super(Linear, self).__init__()
         w_init = tf.random_normal_initializer()
         self.__w = tf.Variable(
             initial_value=w_init(shape=(input_dim, units), dtype="float32"),

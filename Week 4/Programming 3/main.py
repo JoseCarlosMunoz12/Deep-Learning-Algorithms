@@ -1,10 +1,9 @@
 import tensorflow as tf
-from tensorflow import keras
+import tensorflow.keras as keras
 import numpy as np
-
-
 from MyModule import MyModel as Mm
 from MyModule import Linear
+
 model = Mm()
 w_0 = tf.constant([[1.0, 2.0], [2.0, 3.0], [3.0, 4.0]])
 b_0 = tf.constant( [[1.0], [2.0], [1.0]])
