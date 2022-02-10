@@ -1,2 +1,16 @@
 Week 4 
 lesson 2 Programming stuff
+input later, Dense layers, outputlaers
+output is Linear, Sigmid or sofmax
+input mostly ReLu or tanh
+Dense layer, every output of layer to next one is a dense layer
+///
+each layer computes a tensor. ex 16 neuron will output. Layers can be split into more dimensions.
+Doesnt say how many will appear in next layer.
+idea
+first layer, capture very detail features. Beggining layers have more features than the next one
+Smaller features group into a larger features. Merge features. Each block reduces feature amount
+how many you begin with, is a work of art. It depends alot.
+These numbers depond on what we are doing or going to solve
+////
+
