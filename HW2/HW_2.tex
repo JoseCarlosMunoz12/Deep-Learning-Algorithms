@@ -1,0 +1,32 @@
+\documentclass[12pt,english]{article}
+\usepackage[a4paper,bindingoffset=0.2in,%
+            left=1in,right=1in,top=1in,bottom=1in,%
+            footskip=.25in]{geometry}
+%Packages being used in this Tex file
+\usepackage{amsmath} % for aligned
+\begin{document}
+ex2)\\
+we know that
+\begin{align*}
+x_1&=2 & x_2&= 3 & \frac{\delta L}{\delta o}&=5\\
+     &     & o   &= x_1 * x_2 
+\end{align*}
+To find $\frac{\delta L}{\delta x_1}$ and $\frac{\delta L}{\delta x_2}$ we use the Chain rule which gives us $\frac{\delta L}{\delta o}\frac{\delta o}{\delta x_1}$ and $\frac{\delta L}{\delta o}\frac{\delta o}{\delta x_2}$ respectively. It can be derived that $\frac{\delta o}{\delta x_1}$ and $\frac{\delta o}{\delta x_2}$ are $x_2$ and $x_1$ respectively\\
+Therefore we can solve for both\\
+\begin{align*}
+\frac{\delta L}{\delta x_1}&=\frac{\delta L}{\delta o}\frac{\delta o}{\delta x_1} & \frac{\delta L}{\delta x_2}&=\frac{\delta L}{\delta o}\frac{\delta o}{\delta x_2}\\
+                                      &=5*x_2  &  &=5 *x_1\\
+                                      &=5*3  &  &=5 *2\\
+\frac{\delta L}{\delta x_1}&=15  &  \frac{\delta L}{\delta x_2}&=10\\
+\end{align*}
+hw2)\\
+\begin{align*}
+  f(x) &= x^2\\
+ &= \frac{1}{x}\
+\end{align*}
+\begin{align*}
+  f(x) &= x^2 &  g(x) &= \frac{1}{x}\\
+  F(x) &= \int^a_b \frac{1}{3}x^3 &  F(x) &= \int^a_b \frac{1}{3}x^3
+\end{align*}
+
+\end{document}
