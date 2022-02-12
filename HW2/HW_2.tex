@@ -2,10 +2,44 @@
 \usepackage[a4paper,bindingoffset=0.2in,%
             left=1in,right=1in,top=1in,bottom=1in,%
             footskip=.25in]{geometry}
-%Packages being used in this Tex file
-\usepackage{amsmath} % for aligned
+\usepackage{blindtext}
+\usepackage{titling}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{lettrine} 
+\usepackage{tikz}  
+\usepackage{color} 
+ \usetikzlibrary{shapes, arrows, calc, arrows.meta, fit, positioning} % these are the parameters passed to the library to create the node graphs  
+\tikzset{  
+    -Latex,auto,node distance =0.6 cm and 1.3 cm, thick,% node distance is the distance between one node to other, where 1.5cm is the length of the edge between the nodes  
+    state/.style ={ellipse, draw, minimum width = 0.9 cm}, % the minimum width is the width of the ellipse, which is the size of the shape of vertex in the node graph  
+    point/.style = {circle, draw, inner sep=0.18cm, fill, node contents={}},  
+    bidirected/.style={Latex-Latex,dashed}, % it is the edge having two directions  
+    el/.style = {inner sep=2.5pt, align=right, sloped}  
+}  
+\setlength{\parskip}{12pt}
+\title{Home Work 1 Undergraduate}
+\date{\today}
+\author{Jose Carlos Munoz}
+%================================
+\def\defname{{1/0/-1/0/{\{1,1\}}},
+				{2/1/-1/1/{\{2,2\}}},
+				{3/2/-1/2/{\{3,1\}}},
+				{4/3/1/3/{\{2,2\}}},
+				{5/4/-1/0/{\{1,1\}}},
+				{6/5/-1/1/{\{2,2\}}}}
 \begin{document}
-ex2)\\
+\newgeometry{left=0.8in,right=0.8in,top=1in,bottom=1in}
+\begin{center}
+    \Large
+    \textbf{Homework 1}\\
+    \small
+    \today\\
+    \large
+    Jose Carlos Munoz
+\end{center}
+excersize 1)\\
 we know that
 \begin{align*}
 x_1&=2 & x_2&= 3 & \frac{\delta L}{\delta o}&=5\\
@@ -19,14 +53,11 @@ Therefore we can solve for both\\
                                       &=5*3  &  &=5 *2\\
 \frac{\delta L}{\delta x_1}&=15  &  \frac{\delta L}{\delta x_2}&=10\\
 \end{align*}
-hw2)\\
-\begin{align*}
-  f(x) &= x^2\\
- &= \frac{1}{x}\
+excersize 2)\\
+We know that $\vec{w_1} = 0.1$, $w_2 = 0.5$, $w_3 = 0.4$, $w_4 = 0.3$, $w_5 = 0.2$, $w_6 = 0.6$. The Hidden Layer and Actrivation Layer both have the activation function as $y_n(z) = \frac{1}{1 + e^{-1}}$. The Loss function is $L = \frac{1}{2} (y - \hat{y})^{2}$.\\
+Our starting point is $\begin{pmatrix} \begin{pmatrix} 0.82 \\ 0.23 \end{pmatrix}  & 0 \end{pmatrix}$
+\begin{align*} 
+2x - 5y &=  8 \\   
+3x + 9y &=  -12
 \end{align*}
-\begin{align*}
-  f(x) &= x^2 &  g(x) &= \frac{1}{x}\\
-  F(x) &= \int^a_b \frac{1}{3}x^3 &  F(x) &= \int^a_b \frac{1}{3}x^3
-\end{align*}
-
 \end{document}
