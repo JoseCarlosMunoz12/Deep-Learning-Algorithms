@@ -112,9 +112,9 @@ z_E &= w_5 * y_C + w_6 * y_D \\
 For  solving forward propogation we do the following steps
 \begin{align}
 W^T_h * \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}  &= \begin{bmatrix} z_C \\ z_D \end{bmatrix} \\
-\begin{bmatrix} y_n(z_C) \\ y_n(z_D) \end{bmatrix} &= \begin{bmatrix} y_C \\ y_D \end{bmatrix} \\
+\begin{bmatrix} y_h(z_C) \\ y_h(z_D) \end{bmatrix} &= \begin{bmatrix} y_C \\ y_D \end{bmatrix} \\
 W^T_o * \begin{bmatrix} y_C \\ y_D \end{bmatrix} &=z_E\\
-y_E &= y_n(z_E)
+y_E &= y_o(z_E)
 \end{align}
 Plugging in the values we get this
 \begin{align*}
