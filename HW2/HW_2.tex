@@ -89,7 +89,7 @@ The Neural Network is as follows.
 \end{tikzpicture}
 \end{center}
 We know that $w_1 = 0.1$, $w_2 = 0.5$, $w_3 = 0.4$, $w_4 = 0.3$, $w_5 = 0.2$, $w_6 = 0.6$. The Hidden Layer and Output Layer,$y_h()$ and $y_o()$ respectively , both have the activation function of $y_n(z) = \frac{1}{1 + e^{-z}}$. The Loss function is $L = \frac{1}{2} (y - \hat{y})^{2}$, where y is the expected value and $\hat{y}$ is the actual value\\
-Our starting point is $\begin{pmatrix} \begin{bmatrix} 0.82 \\ 0.23 \end{bmatrix}  & 0 \end{pmatrix}$.
+Our starting data set, $\left( \vec{x} , y \right)$, is $\left( \begin{bmatrix} 0.82 \\ 0.23 \end{bmatrix} , 0 \right)$.
 The Weights for each nodes are as follows
 \begin{align*} 
 \vec{w_C} &= \begin{bmatrix} w_1 \\ w_3 \end{bmatrix} &
@@ -133,8 +133,8 @@ For Back propagation, the outer layer weights will derived as
 \frac{\partial L}{\partial w_5} &=\frac{\partial L}{\partial y_e} * \frac{\partial y_e}{\partial z_e} * \frac{\partial z_e}{\partial w_5} &
 \frac{\partial L}{\partial w_6} &=\frac{\partial L}{\partial y_e} * \frac{\partial y_e}{\partial z_e} * \frac{\partial z_e}{\partial w_6} &
 \delta_o &= \frac{\partial L}{\partial y_e} * \frac{\partial y_e}{\partial z_e}\\
-\frac{\partial L}{\partial w_5} &= \delta_o * \frac{\partial z_e}{\partial w_5} &
-\frac{\partial L}{\partial w_6} &= \delta_o * \frac{\partial z_e}{\partial w_6} &
+&= \delta_o * \frac{\partial z_e}{\partial w_5} &
+&= \delta_o * \frac{\partial z_e}{\partial w_6} &
 \end{align*}
  For the weights that connect to Node C, we find the rate of change as
 \begin{align*}
