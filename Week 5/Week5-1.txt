@@ -1,0 +1,32 @@
+2:17 PM 2/15/2022
+Week 5 lesson 1
+Example of extracting features form a Picture
+Goal to detect an object in am image
+//picture repesentation of object in picture
+whatever method is used to recognize object should not be concerned with the precise location of the object in the image
+*Invariance- transformation of the board doesn't affect the image
+our NN should be able to take this into account and transiontional invariance
+*Locality Principle- not all data points but parts that matter to it
+*Each early Layer should enhance a feature
+What is Transitional invariance
+----------
+Training, Testing, Classificatin
+Training-Giving Data. NOT ABLE TO CHANGE FEATURES OR LABELS. IDEAL System is to seperate them well. and classify them well
+Validation Data- Feed into network and see if it correctly seperates data
+Testing Data- Goal to validate the NN and see if it perfoms well
+Testing Data used once
+----------
+Convolutional Netwroks
+Transitional INvariance. if we move it , translate, it, still same thing
+****Need to see video of Transiontal INvariance and Feature extraction****
+Convergence of board into a new Board.
+Anything out of the locality, is of no use and assume to be a zero
+Convolutional Filtering-used to discovered basic features
+Use a filtering to get basic features from it
+the kernel help determine the values and weighs of the value
+V is the kernel, X is the data set
+Nessarry allows us to use cross correlation. Convolution is much harder. Limit it by size. 
+-Cross correlation Kernel-
+are domain aware networks. THink matrix as geometrical position. geomoetry matter
+Implemented as a tensor product
+Good thing about is the back propogation has decomvolution. allows to compute back propogation
