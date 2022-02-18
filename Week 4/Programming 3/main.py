@@ -1,5 +1,5 @@
 import tensorflow as tf
-import tensorflow.keras as keras
+from tensorflow import keras
 import numpy as np
 from MyModule import MyModel as Mm
 from MyModule import Linear
