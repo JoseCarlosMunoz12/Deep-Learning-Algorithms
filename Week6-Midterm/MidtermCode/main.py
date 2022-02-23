@@ -12,12 +12,25 @@ class Layer:
         sig = lambda t: 1 / (1 + math.exp(-t))
         return np.array([sig(xi) for xi in z])
 
+    def reLU_f(self, z):
+        sig = lambda t: max(0, t)
+        return np.array([sig(xi) for xi in z])
+
     def multiply(self, a_input):
         weights_T = np.matrix.transpose(self.weights)
+        print('Weights Matrix')
         print(weights_T)
         z = np.matmul(weights_T, a_input)
+        print('Pre activation')
         print(z)
-        return self.sigmoid_f(z)
+        print('Post Activation')
+        print('using %s' % self.a_function)
+        if self.a_function == 'SIGMOID':
+            return self.sigmoid_f(z)
+        elif self.a_function == 'RELU':
+            return self.reLU_f(z)
+        else:
+            return z
 
 
 def main(name):
@@ -33,7 +46,8 @@ def main(name):
             num_rows = int(line[1])
             num_cols = int(line[3])
         elif line[0] == 'f':
-            layers.append(Layer(cur_layer, line))
+            func = line.split('-')
+            layers.append(Layer(cur_layer, func[1].strip()))
         else:
             count = 0
             nums = line.split(',')
