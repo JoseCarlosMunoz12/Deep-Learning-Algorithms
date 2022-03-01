@@ -16,6 +16,11 @@ class Layer:
         sig = lambda t: max(0, t)
         return np.array([sig(xi) for xi in z])
 
+    def linear_f(self, z):
+        sig = lambda t: t
+        return np.array([sig(xi) for xi in z])
+
+
     def multiply(self, a_input):
         weights_T = np.matrix.transpose(self.weights)
         print('Weights Matrix')
@@ -30,7 +35,7 @@ class Layer:
         elif self.a_function == 'RELU':
             return self.reLU_f(z)
         else:
-            return z
+            return self.linear_f(z)
 
 
 def main(name):
@@ -55,8 +60,8 @@ def main(name):
                 for i in range(num_rows):
                     cur_layer[i][j] = float(nums[count])
                     count += 1
-    point = np.array([[0.82],
-                      [0.23]])
+    point = np.array([[0.0],
+                      [1.0]])
     for layer in layers:
         point = layer.multiply(point)
         print(point)
