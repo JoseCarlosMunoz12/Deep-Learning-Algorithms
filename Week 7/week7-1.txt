@@ -1,0 +1,49 @@
+1:47 PM 3/1/2022
+Convuolution operation
+we average the value.
+the convolution is noted as
+s(t) = x * w(t)
+x is the input and w is the kernel
+similar to a filter. remove noise and see some feature pattern
+
+Weights are parameters of each neuron, 
+when averagin, we are averagin either within a batch
+
+both convolution contribute to filter of particular new picture. Have different weights for horizontal and vertical weights
+Wi(lambda,p, q)
+Relation beteween two filters and its positions
+Average over teh kernel
+Implementation of the filter
+Local kernel avereage over a certaion location in the picture.
+ex, like those average value in a blocked section of a pitcture
+Not all have same weifhts. Good convolution filter are normalize. In practice, not usual
+These are starting weights. Will changed when being trained
+//
+Technicalitiy
+a 2d tensors computation is Hadamard product
+//
+How to elminate the values of the whole thing.
+Usually working with local values. need offset of center of the kernel
+Its important because we are suming around the offest. Offset are small enough to ignoreg
+//
+Stride formally. We won't be taking all of the values. Sub sample the data. THis means that there is a step to skip. A stride as its called.
+why do this?
+not about reduction is about noise. If we don't do this a noisy point might contribute more than it needs to do. Amplifying the mistake
+Its a Heuristic method to reduce noise in noisy picture.
+Z = c(V * K, u)
+Ordinary convolution without padding is also known as  a valid convolution, with padding its called a full convolution.
+Noctice that in valid, full and in strided convolution fitler, applied to all inputs of one layer of one channel is the same.
+//
+Local Convolution:
+instead of doing all for all we do it a map. Some area goes to a diffent section. There isa graph of filter and areas and in inputs. It tells what goes to which one.
+Its usefull when you know what you are looking for.
+//
+Local convolution All weights are different
+Tiled Convolution a pattern are weights.
+Full convolution, everythng applies to everything.
+Three main types of convolutional setup.
+Local usualy requires a graph.
+the rest, its up to us.
+Practioneers can call
+//
+Back Propogation for CNN

@@ -57,10 +57,7 @@ def get_file(fileName=""):
     return data
 
 
-def main():
-    # Loading file
-    file = get_file('house.txt')
-    lines = file.readlines()
+def separate_data(lines):
     dic = {}
     data = []  # holds all of feature for each point
     labels = []  # holds all of the labels for each point
@@ -80,19 +77,45 @@ def main():
     rows = len(data)
     rng = default_rng()
     # Select training and testing data
-    train_idx = rng.choice(rows, size=math.ceil(rows*3/4), replace=False)
+    train_idx = rng.choice(rows, size=math.ceil(rows * 3 / 4), replace=False)
+    test_idx = np.setdiff1d(np.array(range(0, rows)), train_idx)
+    x_test = []
+    y_test = []
+    for test in test_idx:
+        x_test.append(data[test])
+        y_test.append(labels[test])
     x_train = []
     y_train = []
     for train in train_idx:
         x_train.append(data[train])
         y_train.append(labels[train])
-    test_idx = np.setdiff1d(np.array(range(0, rows)), train_idx)
-    x_test = []
-    y_test = []
-    for test in test_idx:
-        x_train.append(data[test])
-        y_train.append(labels[test])
+    # separate training set to partial training and validation set
+    partial_test_set = rng.choice(len(x_train), size=math.ceil((len(x_train)) * 8 / 10), replace=False)
+    valid_set = np.setdiff1d(np.array(range(0, len(x_train))), partial_test_set)
+    x_p_train = []
+    y_p_train = []
+    for p_train in partial_test_set:
+        x_p_train.append(data[p_train])
+        y_p_train.append((labels[p_train]))
+    x_validation = []
+    y_validation = []
+    for validation in valid_set:
+        x_validation.append(data[validation])
+        y_validation.append(labels[validation])
+    return (x_test, x_p_train, x_validation), (y_test, y_p_train, y_validation)
 
+
+def main():
+    # Loading file
+    file = get_file('house.txt')
+    lines = file.readlines()
+    (x_test, x_pTrain, x_valid), (y_test, y_pTrain, y_valid) = separate_data(lines)
+    print(len(x_test))
+    print(len(x_pTrain))
+    print(len(x_valid))
+    print(len(y_test))
+    print(len(y_pTrain))
+    print(len(y_valid))
 
 
 if __name__ == '__main__':
