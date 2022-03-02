@@ -1,10 +1,11 @@
 import tensorflow as tf
-import keras
+from keras import  models
+from keras import layers
 import numpy as np
-import pandas as pd
 import math
 import os
 from numpy.random import default_rng
+import matplotlib.pyplot as plt
 
 try:
     from google.colab import drive
@@ -105,17 +106,65 @@ def separate_data(lines):
     return (x_test, x_p_train, x_validation), (y_test, y_p_train, y_validation)
 
 
+def vectorize_data(sequences, dimensions=1000):
+    results = np.zeros((len(sequences),dimensions))
+    for i, sequence in enumerate(sequences):
+        results[i] = sequences[i]
+    return results
+
+
 def main():
     # Loading file
     file = get_file('house.txt')
     lines = file.readlines()
     (x_test, x_pTrain, x_valid), (y_test, y_pTrain, y_valid) = separate_data(lines)
-    print(len(x_test))
-    print(len(x_pTrain))
-    print(len(x_valid))
-    print(len(y_test))
-    print(len(y_pTrain))
-    print(len(y_valid))
+    # Vectorize data
+    x_dimen = len(x_test[0])
+    x_test = vectorize_data(x_test, x_dimen)
+    x_pTrain = vectorize_data(x_pTrain, x_dimen)
+    x_valid = vectorize_data(x_valid, x_dimen)
+    print(x_test[0])
+    # Create ANN network
+    house_model = models.Sequential()
+    house_model.add(layers.Dense(16, activation='relu', input_shape=x_dimen))
+    house_model.add(layers.Dense(16, activation='relu'))
+    house_model.add(layers.Dense(4, activation='softmax'))
+    house_model.compile(optimizer='rmsprop', loss='binary_crossentropy',
+                        metrics=['accuracy'])
+    # Fit Data
+    history = house_model.fit(x_pTrain, y_pTrain,
+                              epochs=45,
+                              batch_size=512,
+                              validation_data=(x_valid, y_valid))
+    # Plotting data of the training and validation loss
+    history_dict = history.history
+    acc = history.history['accuracy']
+    val_acc = history.history['val_accuracy']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+    epochs = range(1, len(acc) + 1)
+    plt.plot(epochs, loss, 'bo', label='Training loss')
+    plt.plot(epochs, val_loss, 'b', label='Validation loss')
+    plt.title('Training and validation loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.show()
+    # Plotting data of the training and validation Accuracy
+    plt.clf()
+    acc_values = history_dict['accuracy']
+    val_acc_values = history_dict['val_accuracy']
+    plt.plot(epochs, acc, 'ro', label='Training acc')
+    plt.plot(epochs, val_acc, 'g^', label='Validation acc')
+    plt.title('Training and validation accuracy')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.show()
+    # Evaluate the Data Set
+    l, acc = house_model.evaluate(x_test, y_test)
+    print('mean probability of correct classification (1-loss) is : ', l, '\n', 'accuracy is: ', acc)
+    print(house_model.predict(x_test))
 
 
 if __name__ == '__main__':
