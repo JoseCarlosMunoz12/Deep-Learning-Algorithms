@@ -1,0 +1,22 @@
+2:46 PM 3/3/2022
+week 7 lecture 2
+we have a number of possible models.
+one models assume one error and another assume another error
+What we take is the covariance of noises is equal to c, a constant
+error made by avearage prediction of all ensble model si no cavriance. Consatnt covariance is same as no covariance, shifted.
+Evaluate what we get our error, by expected square error
+we get the function v/k + (k -1)/k * c
+wehere v is the particulate sum of e_i
+What is bagging, NN are the same. But differnet training samples give different models.
+why is it good? ranom initialization fowiefhts, random selection of minibatches, and different hyperparameters.
+enough to cause different membes of ensemble to have uncorrelated errors.
+//====================================\\
+Dropout
+NN problemLfeature Co-adaptation
+when training NN, often leads to high level of dependece among features
+NOT informative.
+usually overfitting
+we don't want it to adjust just because occurs in training.
+we want differnt groups of freature, not grouping them too much.
+what can be done?
+mini batch algorithm for the dropout. that take small steps and droup out some thing.
