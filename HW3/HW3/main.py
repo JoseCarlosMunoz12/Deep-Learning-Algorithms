@@ -1,5 +1,5 @@
 import tensorflow as tf
-from keras import  models
+from keras import models
 from keras import layers
 import numpy as np
 import math
@@ -106,30 +106,24 @@ def separate_data(lines):
     return (x_test, x_p_train, x_validation), (y_test, y_p_train, y_validation)
 
 
-def vectorize_data(sequences, dimensions=1000):
-    results = np.zeros((len(sequences),dimensions))
-    for i, sequence in enumerate(sequences):
-        results[i] = sequences[i]
-    return results
-
-
 def main():
     # Loading file
     file = get_file('house.txt')
     lines = file.readlines()
     (x_test, x_pTrain, x_valid), (y_test, y_pTrain, y_valid) = separate_data(lines)
-    # Vectorize data
+    # Set results as categorical
+    y_test = tf.keras.utils.to_categorical(y_test)
+    y_pTrain = tf.keras.utils.to_categorical(y_pTrain)
+    y_valid = tf.keras.utils.to_categorical(y_valid)
     x_dimen = len(x_test[0])
-    x_test = vectorize_data(x_test, x_dimen)
-    x_pTrain = vectorize_data(x_pTrain, x_dimen)
-    x_valid = vectorize_data(x_valid, x_dimen)
-    print(x_test[0])
     # Create ANN network
     house_model = models.Sequential()
-    house_model.add(layers.Dense(16, activation='relu', input_shape=x_dimen))
+    house_model.add(layers.Dense(64, activation='relu', input_shape=x_dimen))
+    house_model.add(layers.Dense(32, activation='relu'))
     house_model.add(layers.Dense(16, activation='relu'))
+    house_model.add(layers.Dense(8, activation='relu'))
     house_model.add(layers.Dense(4, activation='softmax'))
-    house_model.compile(optimizer='rmsprop', loss='binary_crossentropy',
+    house_model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
                         metrics=['accuracy'])
     # Fit Data
     history = house_model.fit(x_pTrain, y_pTrain,
@@ -163,7 +157,7 @@ def main():
     plt.show()
     # Evaluate the Data Set
     l, acc = house_model.evaluate(x_test, y_test)
-    print('mean probability of correct classification (1-loss) is : ', l, '\n', 'accuracy is: ', acc)
+    print('accuracy is: ', acc)
     print(house_model.predict(x_test))
 
 
