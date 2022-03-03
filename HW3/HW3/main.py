@@ -29,14 +29,16 @@ def get_file(fileName=""):
         if not os.path.exits(base_dir):
             os.mkdir(base_dir)
     else:
-        base_dir = os.getcwd() + '/data'
+        base_dir = os.getcwd() + '\\data'
     if fileName == "":
         fName = input("Enter File Name:\n")
     else:
         fName = fileName
     file = os.path.join(base_dir, fName)
     try:
-        data = pd.read_csv(file)
+        data = pd.read_csv(file, header=None, names=['longitude','latitude','housing_median_age','total_rooms',\
+                                             'total_bedrooms','population','households','median_income',\
+                                             'median_house_value','ocean_proximity'])
         ferror = False
     except FileNotFoundError:
         ferror = True
@@ -52,7 +54,9 @@ def get_file(fileName=""):
                     exit
                 else:
                     try:
-                        data = pd.read_csv(fName1)
+                        data = pd.read_csv(fName1, header=None,  names=['longitude','latitude','housing_median_age','total_rooms',\
+                                             'total_bedrooms','population','households','median_income',\
+                                             'median_house_value','ocean_proximity'])
                         rep = False
                     except:
                         print('incorrect file name')
@@ -60,28 +64,36 @@ def get_file(fileName=""):
 
 
 def separate_data(data):
-    print(data)
+    # set values of categorical column
+    cleanup_nums = {"ocean_proximity": {"INLAND": 1, "<1H OCEAN": 2, "NEAR OCEAN": 3, "NEAR BAY": 4, "ISLAND": 5}}
+    data = data.replace(cleanup_nums)
     cols = data.shape[1]
     rows = data.shape[0]
-    X = np.array(data.iloc[:, 0:cols - 2], np.float32)
-    y = np.array(data.iloc[:, cols - 2:cols - 1], np.float32)
+    X = np.array(data.iloc[:, 0:-2], np.float32)
+    y = np.array(data.iloc[:, -1], np.int)
     rng = default_rng()
     # select training and testing data
     train_idx = rng.choice(rows, size=math.ceil(rows * 3 / 4), replace=False)
     x_train = X[train_idx, :]
-    y_train = y[train_idx, :]
+    y_train = y[train_idx]
     test_idx = np.setdiff1d(np.array(range(0, rows)), train_idx)
     x_test = X[test_idx, :]
-    y_test = y[test_idx, :]
-    return
+    y_test = y[test_idx]
+    # select training and validation data from the training set
+    rows = x_train.shape[0]
+    part_train = rng.choice(rows, size=math.ceil(rows * 3 / 4), replace=False)
+    x_p_train = x_train[part_train, :]
+    y_p_train = y_train[part_train]
+    valid_train = np.setdiff1d(np.array(range(0, rows)), part_train)
+    x_valid = x_train[valid_train, :]
+    y_valid = y_train[valid_train]
+    return(x_test, x_p_train, x_valid), (y_test, y_p_train, y_valid)
 
 
 def main():
     # Loading file
     data = get_file('house.csv')
-    separate_data(data)
-    # (x_test, x_pTrain, x_valid), (y_test, y_pTrain, y_valid) =
-    exit()
+    (x_test, x_pTrain, x_valid), (y_test, y_pTrain, y_valid) = separate_data(data)
     # Set results as categorical
     y_test = tf.keras.utils.to_categorical(y_test)
     y_pTrain = tf.keras.utils.to_categorical(y_pTrain)
@@ -93,7 +105,7 @@ def main():
     house_model.add(layers.Dense(32, activation='relu'))
     house_model.add(layers.Dense(16, activation='relu'))
     house_model.add(layers.Dense(8, activation='relu'))
-    house_model.add(layers.Dense(4, activation='softmax'))
+    house_model.add(layers.Dense(5, activation='softmax'))
     house_model.compile(optimizer='rmsprop', loss='categorical_crossentropy',
                         metrics=['accuracy'])
     # Fit Data
