@@ -36,9 +36,9 @@ def get_file(fileName=""):
         fName = fileName
     file = os.path.join(base_dir, fName)
     try:
-        data = pd.read_csv(file, header=None, names=['longitude','latitude','housing_median_age','total_rooms',\
-                                             'total_bedrooms','population','households','median_income',\
-                                             'median_house_value','ocean_proximity'])
+        data = pd.read_csv(file, header=None, names=['0','1','2','3',\
+                                             '4','5','6','7',\
+                                             '8','ocean_proximity'])
         ferror = False
     except FileNotFoundError:
         ferror = True
@@ -65,19 +65,23 @@ def get_file(fileName=""):
 
 def separate_data(data):
     # set values of categorical column
-    cleanup_nums = {"ocean_proximity": {"INLAND": 1, "<1H OCEAN": 2, "NEAR OCEAN": 3, "NEAR BAY": 4, "ISLAND": 5}}
+    data = data.fillna(0)
+    cleanup_nums = {"ocean_proximity": {"INLAND": 0, "<1H OCEAN": 1, "NEAR OCEAN": 2, "NEAR BAY": 3, "ISLAND": 4}}
     data = data.replace(cleanup_nums)
     cols = data.shape[1]
     rows = data.shape[0]
-    X = np.array(data.iloc[:, 0:-2], np.float32)
-    y = np.array(data.iloc[:, -1], np.int)
+    x = np.array(data.iloc[:, 0:-2], np.float32)
+    x = x.astype('float32')
+    x = (x - x.min(axis=0)) / x.ptp(axis=0)
+    y = np.array(data.iloc[:, -1], np.int32)
+    y = tf.keras.utils.to_categorical(y)
     rng = default_rng()
     # select training and testing data
     train_idx = rng.choice(rows, size=math.ceil(rows * 3 / 4), replace=False)
-    x_train = X[train_idx, :]
+    x_train = x[train_idx, :]
     y_train = y[train_idx]
     test_idx = np.setdiff1d(np.array(range(0, rows)), train_idx)
-    x_test = X[test_idx, :]
+    x_test = x[test_idx, :]
     y_test = y[test_idx]
     # select training and validation data from the training set
     rows = x_train.shape[0]
@@ -95,13 +99,10 @@ def main():
     data = get_file('house.csv')
     (x_test, x_pTrain, x_valid), (y_test, y_pTrain, y_valid) = separate_data(data)
     # Set results as categorical
-    y_test = tf.keras.utils.to_categorical(y_test)
-    y_pTrain = tf.keras.utils.to_categorical(y_pTrain)
-    y_valid = tf.keras.utils.to_categorical(y_valid)
     x_dimen = len(x_test[0])
     # Create ANN network
     house_model = models.Sequential()
-    house_model.add(layers.Dense(64, activation='relu', input_shape=(x_dimen,)))
+    house_model.add(layers.Dense(64, activation='relu', input_shape=(x_dimen, )))
     house_model.add(layers.Dense(32, activation='relu'))
     house_model.add(layers.Dense(16, activation='relu'))
     house_model.add(layers.Dense(8, activation='relu'))
@@ -110,8 +111,8 @@ def main():
                         metrics=['accuracy'])
     # Fit Data
     history = house_model.fit(x_pTrain, y_pTrain,
-                              epochs=45,
-                              batch_size=512,
+                              epochs=32,
+                              batch_size=128,
                               validation_data=(x_valid, y_valid))
     # Plotting data of the training and validation loss
     history_dict = history.history
