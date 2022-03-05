@@ -1,0 +1,73 @@
+\documentclass[12pt,english]{article}
+\usepackage[a4paper,bindingoffset=0.2in,%
+            left=1in,right=1in,top=1in,bottom=1in,%
+            footskip=.25in]{geometry}
+\usepackage{blindtext}
+\usepackage{titling}
+\usepackage{amssymb}
+\usepackage{listofitems,amsmath}
+\usepackage{listings}
+\usepackage{lettrine} 
+\usepackage{tikz}  
+\usepackage{color} 
+ \usetikzlibrary{shapes, arrows, calc, arrows.meta, fit, positioning} % these are the parameters passed to the library to create the node graphs  
+\tikzset{  
+    -Latex,auto,node distance =0.6 cm and 1.3 cm, thick,% node distance is the distance between one node to other, where 1.5cm is the length of the edge between the nodes  
+    state/.style ={ellipse, draw, minimum width = 0.9 cm}, % the minimum width is the width of the ellipse, which is the size of the shape of vertex in the node graph  
+    point/.style = {circle, draw, inner sep=0.18cm, fill, node contents={}},  
+    bidirected/.style={Latex-Latex,dashed}, % it is the edge having two directions  
+    el/.style = {inner sep=2.5pt, align=right, sloped}  
+}  
+\setlength{\parskip}{12pt}
+%================================
+\begin{document}
+\newgeometry{left=0.8in,right=0.8in,top=1in,bottom=1in}
+\begin{center}
+    \Large
+    \textbf{Homework 4}\\
+    \small
+    \today\\
+    \large
+    Jos\'{e} Carlos Mu\~{n}oz
+\end{center}
+\section*{1}
+The original 1D data set is
+\begin{align*}
+\begin{bmatrix} 2 & 1 & 3 & 4 & 7\end{bmatrix}
+\end{align*}
+The filter we are using is
+\begin{align*}
+\begin{bmatrix} 1 & 0 & 1\end{bmatrix}
+\end{align*}
+Using the convolution the math looks like this
+\begin{align*}
+ 2 * 1 + 1 * 0 + 3 * 1 & = 5\\
+ 1 * 1 + 3 * 0 + 4 * 1 & = 5\\
+ 3 * 1 + 4 * 0 + 7 * 1 & = 10
+\end{align*}
+Therefore, the final matrix will be
+\begin{align*}
+\begin{bmatrix} 5 & 5 & 10\end{bmatrix}
+\end{align*}
+\section*{4}
+
+\section*{7}
+The 7x7 matrix is
+\begin{align*}
+\begin{bmatrix}6&3&4&4&5&0&3\\4&7&4&0&4&0&4\\7&0&2&3&4&5&2\\3&7&5&0&3&0&7\\5&8&1&2&5&4&2\\8&0&1&0&6&0&0\\6&4&1&3&0&4&5\end{bmatrix}
+\end{align*}
+The 3x3 matrix
+\begin{align*}
+\begin{bmatrix} 1 & 1 & 1\\ 0 & 0 & 0\\ -1 & -1 & -1\end{bmatrix}
+\end{align*}
+Using the convolution the math looks like this, only the first 3 columns of the first row of the new matrix will be calculated
+\begin{align*}
+4 &= 6*1 + 3*1 + 4*1 + 4*0 + 7*0 + 4*0 + 7*-1 + 0*-1 + 2 *-1\\
+3 &= 3*1 + 4*1 + 4*1 + 7*0 + 4*0 + 0*0 + 0*-1 + 2*-1 + 3 *-1\\
+4 &= 4*1 + 4*1 + 5*1 + 4*0 + 0*0 + 4*0 + 2*-1 + 3*-1 + 4 *-1
+\end{align*}
+The final convolution matrix is
+\begin{align*}
+\begin{bmatrix} 4 & 3 & 4 & -3 & -3\\ 0 & -1 & 0 & 1 & -2\\ -5 & -6 & 1 & -1 & 0\\ 6 & 11 & 1 & -3 & 1\\ 3 & 3 & 4 & 4 & 2\end{bmatrix}
+\end{align*}
+\end{document}
