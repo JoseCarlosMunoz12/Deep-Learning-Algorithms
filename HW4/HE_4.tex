@@ -55,7 +55,7 @@ Using what we know we can now determine the dimensions of the Tensor as it pases
 For the First CNN
 \begin{equation*}
 \begin{array}{c|c}
- \hbox{Layer}& \hbox{output of Layer}  \\
+ \hbox{Layer}& \hbox{output dimensions of Layer}  \\
 \hline
 L_1 & 224x224x64 \\
 M & 112x112x64 \\
@@ -67,16 +67,17 @@ L_5,L_6 & 28x28x512 \\
 M & 14x14x512\\
 L_7,L_8 & 14x14x512 \\
 M & 7x7x512\\
-L_9,L_{10} & 14x14x4096 \\
-L_{11} & 14x14x1000 
+L_9,L_{10} & 1x1x4096 \\
+L_{11} & 1x1x1000 
 \end{array} 
 \end{equation*}
 For the Second CNN
 \begin{equation*}
 \begin{array}{c|c}
- \hbox{Layer}& \hbox{output of Layer}  \\
+ \hbox{Layer}& \hbox{output dimensions of Layer}  \\
 \hline
 L_1 & 224x224x64 \\
+LRN & 224x224x64 \\
 M & 112x112x64 \\
 L_2 & 112x112x128 \\
 M & 56x56x128 \\
@@ -86,8 +87,84 @@ L_5,L_6 & 28x28x512 \\
 M & 14x14x512\\
 L_7,L_8 & 14x14x512 \\
 M & 7x7x512\\
-L_9,L_{10} & 14x14x4096 \\
-L_{11} & 14x14x1000 
+L_9,L_{10} & 1x1x4096 \\
+L_{11} & 1x1x1000 
+\end{array} 
+\end{equation*}
+For the Third CNN
+\begin{equation*}
+\begin{array}{c|c}
+ \hbox{Layer}& \hbox{output dimensions of Layer}  \\
+\hline
+L_1,L_2 & 224x224x64 \\
+M & 112x112x64 \\
+L_3,L_4 & 112x112x128 \\
+M & 56x56x128 \\
+L_5,L_6 & 56x56x256 \\
+M & 28x28x256\\
+L_7,L_8 & 28x28x512 \\
+M & 14x14x512\\
+L_9,L_{10} & 14x14x512 \\
+M & 7x7x512\\
+L_{11},L_{12} & 1x1x4096 \\
+L_{13} & 1x1x1000 
+\end{array} 
+\end{equation*}
+For the Fourth CNN
+\begin{equation*}
+\begin{array}{c|c}
+ \hbox{Layer}& \hbox{output dimensions of Layer}  \\
+\hline
+L_1,L_2 & 224x224x64 \\
+M & 112x112x64 \\
+L_3,L_4 & 112x112x128 \\
+M & 56x56x128 \\
+L_5,L_6,l_7 & 56x56x256 \\
+M & 28x28x256\\
+L_8,L_9,L_{10} & 28x28x512 \\
+M & 14x14x512\\
+L_{11},L_{12},L_{13} & 14x14x512 \\
+M & 7x7x512\\
+L_{14},L_{15} & 1x1x4096 \\
+L_{16} & 1x1x1000 
+\end{array} 
+\end{equation*}
+For the Fifth CNN
+\begin{equation*}
+\begin{array}{c|c}
+ \hbox{Layer}& \hbox{output dimensions of Layer}  \\
+\hline
+L_1,L_2 & 224x224x64 \\
+M & 112x112x64 \\
+L_3,L_4 & 112x112x128 \\
+M & 56x56x128 \\
+L_5,L_6,l_7 & 56x56x256 \\
+M & 28x28x256\\
+L_8,L_9,L_{10} & 28x28x512 \\
+M & 14x14x512\\
+L_{11},L_{12},L_{13} & 14x14x512 \\
+M & 7x7x512\\
+L_{14},L_{15} & 1x1x4096 \\
+L_{16} & 1x1x1000 
+\end{array} 
+\end{equation*}
+For the Sixth CNN
+\begin{equation*}
+\begin{array}{c|c}
+ \hbox{Layer}& \hbox{output dimensions of Layer}  \\
+\hline
+L_1,L_2 & 224x224x64 \\
+M & 112x112x64 \\
+L_3,L_4 & 112x112x128 \\
+M & 56x56x128 \\
+L_5,L_6,L_7, L_8 & 56x56x256 \\
+M & 28x28x256\\
+L_9,L_{10},L_{11}, L_{12} & 28x28x512 \\
+M & 14x14x512\\
+L_{13},L_{14},L_{15}, L_{16} & 14x14x512 \\
+M & 7x7x512\\
+L_{17},L_{18} & 1x1x4096 \\
+L_{19} & 1x1x1000 
 \end{array} 
 \end{equation*}
 \section*{7}
