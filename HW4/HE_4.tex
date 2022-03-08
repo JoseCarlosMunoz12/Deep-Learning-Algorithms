@@ -50,7 +50,46 @@ Therefore, the final matrix will be
 \begin{bmatrix} 5 & 5 & 10\end{bmatrix}
 \end{align*}
 \section*{4}
-
+The Convolution Layer will not change the Hieght and width of the incoming matrix. but it will change the depth amount to however there is in that Convolution layer. The MaxPooling used here will only reduce the width and hieght by a factor of 2.\\
+Using what we know we can now determine the dimensions of the Tensor as it pases through eacho fhte different Convoluted Neural Networks.\\
+For the First CNN
+\begin{equation*}
+\begin{array}{c|c}
+ \hbox{Layer}& \hbox{output of Layer}  \\
+\hline
+L_1 & 224x224x64 \\
+M & 112x112x64 \\
+L_2 & 112x112x128 \\
+M & 56x56x128 \\
+L_3,L_4 & 56x56x256 \\
+M & 28x28x256\\
+L_5,L_6 & 28x28x512 \\
+M & 14x14x512\\
+L_7,L_8 & 14x14x512 \\
+M & 7x7x512\\
+L_9,L_{10} & 14x14x4096 \\
+L_{11} & 14x14x1000 
+\end{array} 
+\end{equation*}
+For the Second CNN
+\begin{equation*}
+\begin{array}{c|c}
+ \hbox{Layer}& \hbox{output of Layer}  \\
+\hline
+L_1 & 224x224x64 \\
+M & 112x112x64 \\
+L_2 & 112x112x128 \\
+M & 56x56x128 \\
+L_3,L_4 & 56x56x256 \\
+M & 28x28x256\\
+L_5,L_6 & 28x28x512 \\
+M & 14x14x512\\
+L_7,L_8 & 14x14x512 \\
+M & 7x7x512\\
+L_9,L_{10} & 14x14x4096 \\
+L_{11} & 14x14x1000 
+\end{array} 
+\end{equation*}
 \section*{7}
 The 7x7 matrix is
 \begin{align*}
