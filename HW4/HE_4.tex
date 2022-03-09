@@ -50,7 +50,7 @@ Therefore, the final matrix will be
 \begin{bmatrix} 5 & 5 & 10\end{bmatrix}
 \end{align*}
 \section*{4}
-The Convolution Layer will not change the Hieght and width of the incoming matrix. but it will change the depth amount to however there is in that Convolution layer. The MaxPooling used here will only reduce the width and hieght by a factor of 2.\\
+The size of the convolution outout can be calculate with the equation $[(W - K + 2*P)/S + 1$. Where W is the dimension of the  incoming tensor. K is the filter size, p is the padding and S is the size of the stride. For these CNN the padding is 1 and the stride is 1. The new tensor size will also have the depth to be same as how many filters therei in the  The MaxPooling for all of these CNN. cuts the dimension in half but keeps the depth the same range.\\
 Using what we know we can now determine the dimensions of the Tensor as it pases through eacho fhte different Convoluted Neural Networks.\\
 For the First CNN
 \begin{equation*}
