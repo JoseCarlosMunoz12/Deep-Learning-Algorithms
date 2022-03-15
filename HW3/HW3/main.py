@@ -111,7 +111,7 @@ def main():
                         metrics=['accuracy'])
     # Fit Data
     history = house_model.fit(x_pTrain, y_pTrain,
-                              epochs=32,
+                              epochs=50,
                               batch_size=128,
                               validation_data=(x_valid, y_valid))
     # Plotting data of the training and validation loss
