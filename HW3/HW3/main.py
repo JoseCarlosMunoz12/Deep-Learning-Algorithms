@@ -96,7 +96,7 @@ def separate_data(data):
 
 def main():
     # Loading file
-    data = get_file('house.csv')
+    data = get_file('house.txt')
     (x_test, x_pTrain, x_valid), (y_test, y_pTrain, y_valid) = separate_data(data)
     # Set results as categorical
     x_dimen = len(x_test[0])
@@ -111,7 +111,7 @@ def main():
                         metrics=['accuracy'])
     # Fit Data
     history = house_model.fit(x_pTrain, y_pTrain,
-                              epochs=50,
+                              epochs=75,
                               batch_size=128,
                               validation_data=(x_valid, y_valid))
     # Plotting data of the training and validation loss
