@@ -1,13 +1,13 @@
 import tensorflow as tf
 from keras.utils import np_utils
+import matplotlib.pyplot as plt
+import shutil
+import os
+import numpy as np
+from keras.preprocessing.image import ImageDataGenerator
 from keras import models
 from keras import layers
 from keras import optimizers
-
-from keras.preprocessing.image import ImageDataGenerator
-import shutil
-import numpy as np
-import os
 
 try:
     from google.colab import drive
@@ -109,6 +109,7 @@ def prepare_data(paths):
         paths[2], target_size=(150, 150), batch_size=20, class_mode='binary')
     test_generator = datagen.flow_from_directory(
         paths[1], target_size=(150, 150), batch_size=20, class_mode='binary')
+    return train_generator, validation_generator, test_generator
 
 
 def main():
@@ -116,6 +117,10 @@ def main():
     base_dir = check_paths(dogs_paths, cats_paths)
     dog_paths, cat_paths, ttv_dirs = make_dirs(base_dir)
     parse_files(dog_paths, cat_paths, dogs_paths, cats_paths)
+    train_g, valid_g, test_g = prepare_data(ttv_dirs)
+    conv_base = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
+    print(conv_base.summary())
+    op = tf.keras.optimizers.RMSprop(lr=2e-5)
 
 
 if __name__ == '__main__':
