@@ -121,6 +121,40 @@ def main():
     conv_base = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
     print(conv_base.summary())
     op = tf.keras.optimizers.RMSprop(lr=2e-5)
+    model = models.Sequential()
+    model.add(conv_base)
+    model.add(layers.Flatten())
+    model.add(layers.Dense(256, activation='relu'))
+    model.add(layers.Dense(1, activation='sigmoid'))
+    conv_base.trainable = False
+    model.compile(optimizer=op, loss='binary_crossentropy', metrics=['acc'])
+    # Display results
+    history = model.fit(train_g, steps_per_epoch=20, epochs=7,
+                        validation_data=valid_g, validation_steps=10, verbose=2)
+    acc = history.history['acc']
+    val_ac = history.history['val_acc']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+
+    epochs = range(len(acc))
+
+    plt.plot(epochs, acc, 'bo', label='Training Acc')
+    plt.plot(epochs, val_ac, 'b', label='Validation Acc')
+    plt.title('Training and Validation Accuracy')
+    plt.legend()
+
+    plt.figure()
+
+    plt.plot(epochs, loss, 'bo', label='Training Loss')
+    plt.plot(epochs, val_loss, 'b', label='Validation loss')
+    plt.title('Training Validation Loss')
+    plt.legend()
+
+    plt.show()
+    plt.clf()
+
+    test_loss, test_acc = model.evaluate(test_g, steps=20)
+    print('test acc:', test_acc)
 
 
 if __name__ == '__main__':
