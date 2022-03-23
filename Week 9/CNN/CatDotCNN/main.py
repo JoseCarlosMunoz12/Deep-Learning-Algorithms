@@ -118,6 +118,9 @@ def main():
     dog_paths, cat_paths, ttv_dirs = make_dirs(base_dir)
     parse_files(dog_paths, cat_paths, dogs_paths, cats_paths)
     train_g, valid_g, test_g = prepare_data(ttv_dirs)
+    val = True
+    if val:
+        return 0
     conv_base = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
     print(conv_base.summary())
     op = tf.keras.optimizers.RMSprop(lr=2e-5)
