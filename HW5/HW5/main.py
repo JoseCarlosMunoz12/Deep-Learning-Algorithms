@@ -13,9 +13,11 @@ try:
     from google.colab import drive
     IN_COLAB = True
     from keras.applications.vgg16 import VGG16
+    from keras.applications.inception_v3 import InceptionV3
 except:
     IN_COLAB = False
     from keras.applications import VGG16
+    from keras.applications import InceptionV3
 
 
 def images_paths():
@@ -97,7 +99,7 @@ def make_dirs(base_dir):
 
 
 def parse_files(dog_paths, cat_paths, elephant_paths, og_dog, og_cat, og_elephant):
-    ranges = [[1, 401], [401, 601], [601, 1001]]
+    ranges = [[1, 601], [601, 801], [801, 1201]]
     for i in range(3):
         limits = ranges[i]
         if len(os.listdir(dog_paths[i])) == 0:
@@ -140,13 +142,14 @@ def end_to_end():
     train_g, valid_g, test_g = prepare_data(ttv_dirs)
     # Preparing model
     conv_base = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
+    conv = InceptionV3(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
     op = tf.keras.optimizers.RMSprop(lr=2e-5)
     model = models.Sequential()
-    model.add(conv_base)
+    model.add(conv)
     model.add(layers.Flatten())
     model.add(layers.Dense(256, activation='relu'))
     model.add(layers.Dense(3, activation='softmax'))
-    conv_base.trainable = False
+    conv.trainable = False
     model.compile(optimizer=op, loss='categorical_crossentropy', metrics=['acc'])
     # Display results
     history = model.fit(train_g, steps_per_epoch=20, epochs=7,
@@ -181,7 +184,7 @@ def end_to_end():
 # Deciding after preprocessing with pretrained NN
 def extract_features(conv_base, directory, sample_count, batch_size=20):
     datagen = ImageDataGenerator(rescale=1./255)
-    features = np.zeros(shape=(sample_count, 4, 4, 512))
+    features = np.zeros(shape=(sample_count, 3, 3, 2048))
     labels = np.zeros(shape=(sample_count, 3))
     generator = datagen.flow_from_directory(directory, target_size=(150, 150),
                                             batch_size=batch_size, class_mode='categorical')
@@ -191,8 +194,6 @@ def extract_features(conv_base, directory, sample_count, batch_size=20):
         features[i * batch_size: (i + 1) * batch_size] = features_batch
         labels[i * batch_size: (i + 1) * batch_size] = labels_batch
         i += 1
-        if i == 800:
-            print('test')
         if i * batch_size >= sample_count:
             break
     return features, labels
@@ -203,16 +204,16 @@ def pre_processing():
     base_dir = check_paths(dog_paths, cat_paths, elephant_paths)
     dogs_paths, cats_paths, elephants_paths, ttv_dirs = make_dirs(base_dir)
     parse_files(dogs_paths, cats_paths, elephants_paths, dog_paths, cat_paths, elephant_paths)
-    conv_base = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
+    conv = InceptionV3(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
     op = tf.keras.optimizers.RMSprop(lr=2e-5)
-    train_feat, train_labels = extract_features(conv_base, ttv_dirs[0], 800)
-    valid_feat, valid_labels = extract_features(conv_base, ttv_dirs[2], 400)
-    test_feat, test_labels = extract_features(conv_base, ttv_dirs[1], 800)
-    train_feat = np.reshape(train_feat, (800, 4 * 4 * 512))
-    valid_feat = np.reshape(valid_feat, (400, 4 * 4 * 512))
-    test_feat = np.reshape(test_feat, (800, 4 * 4 * 512))
+    train_feat, train_labels = extract_features(conv, ttv_dirs[0], 600)
+    valid_feat, valid_labels = extract_features(conv, ttv_dirs[2], 200)
+    test_feat, test_labels = extract_features(conv, ttv_dirs[1], 400)
+    train_feat = np.reshape(train_feat, (600, 3 * 3 * 2048))
+    valid_feat = np.reshape(valid_feat, (200, 3 * 3 * 2048))
+    test_feat = np.reshape(test_feat, (400, 3 * 3 * 2048))
     decision_model = models.Sequential()
-    decision_model.add(layers.Dense(256, activation='relu', input_dim=4 * 4 * 512))
+    decision_model.add(layers.Dense(256, activation='relu', input_dim=3 * 3 * 2048))
     decision_model.add(layers.Dropout(0.5))
     decision_model.add(layers.Dense(3, activation='softmax'))
 
@@ -258,16 +259,16 @@ def with_convolutional_training(set_trainable=False):
     parse_files(dogs_paths, cats_paths, elephants_paths, dog_paths, cat_paths, elephant_paths)
     train_g, valid_g, test_g = prepare_data(ttv_dirs)
     # Preparing model
-    conv_base = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
+    conv = InceptionV3(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
     op = tf.keras.optimizers.RMSprop(lr=2e-5)
     e_to_e_model = models.Sequential()
-    e_to_e_model.add(conv_base)
+    e_to_e_model.add(conv)
     e_to_e_model.add(layers.Flatten())
     e_to_e_model.add(layers.Dense(256, activation='relu'))
     e_to_e_model.add(layers.Dense(3, activation='softmax'))
     # set parts to be trainable
-    conv_base.trainable = True
-    for layer in conv_base.layers:
+    conv.trainable = True
+    for layer in conv.layers:
         if layer.name == 'block5_conv1':
             set_trainable = True
         if set_trainable:
@@ -304,13 +305,12 @@ def with_convolutional_training(set_trainable=False):
     e_test_loss, e_test_acc = e_to_e_model.evaluate(test_g, steps=20)
     print('test acc:', e_test_acc)
     print('test loss:', e_test_loss)
-    pass
 
 
 # Run items
 def main():
-    # end_to_end()
-    # pre_processing()
+    end_to_end()
+    pre_processing()
     with_convolutional_training()
 
 
