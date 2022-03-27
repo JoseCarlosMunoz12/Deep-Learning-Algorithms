@@ -178,7 +178,7 @@ def end_to_end():
     print('test loss:', test_loss)
 
 
-# deciding after preprocessing with pretrained NN
+# Deciding after preprocessing with pretrained NN
 def extract_features(conv_base, directory, sample_count, batch_size=20):
     datagen = ImageDataGenerator(rescale=1./255)
     features = np.zeros(shape=(sample_count, 4, 4, 512))
@@ -249,9 +249,69 @@ def pre_processing():
     print('test loss:', test_loss)
 
 
+# True End to End decision that includes training convolutional Layers of VGG16
+
+def with_convolutional_training(set_trainable=False):
+    dog_paths, cat_paths, elephant_paths = images_paths()
+    base_dir = check_paths(dog_paths, cat_paths, elephant_paths)
+    dogs_paths, cats_paths, elephants_paths, ttv_dirs = make_dirs(base_dir)
+    parse_files(dogs_paths, cats_paths, elephants_paths, dog_paths, cat_paths, elephant_paths)
+    train_g, valid_g, test_g = prepare_data(ttv_dirs)
+    # Preparing model
+    conv_base = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
+    op = tf.keras.optimizers.RMSprop(lr=2e-5)
+    e_to_e_model = models.Sequential()
+    e_to_e_model.add(conv_base)
+    e_to_e_model.add(layers.Flatten())
+    e_to_e_model.add(layers.Dense(256, activation='relu'))
+    e_to_e_model.add(layers.Dense(3, activation='softmax'))
+    # set parts to be trainable
+    conv_base.trainable = True
+    for layer in conv_base.layers:
+        if layer.name == 'block5_conv1':
+            set_trainable = True
+        if set_trainable:
+            layer.trainable = True
+        else:
+            layer.trainable = False
+
+    e_to_e_model.compile(loss='categorical_crossentropy', optimizer=op, metrics=['acc'])
+    # Train AI
+    history = e_to_e_model.fit(train_g, steps_per_epoch=20, epochs=10,
+                               validation_data=valid_g, validation_steps=10,
+                               verbose=2)
+    e_acc = history.history['acc']
+    e_val_acc = history.history['val_acc']
+    e_loss = history.history['loss']
+    e_val_loss = history.history['val_loss']
+
+    e_epochs = range(len(e_acc))
+
+    plt.plot(e_epochs, e_acc, 'bo', label='Training acc')
+    plt.plot(e_epochs, e_val_acc, 'b', label='Validation acc')
+    plt.title('Training and validation accuracy')
+    plt.legend()
+
+    plt.figure()
+
+    plt.plot(e_epochs, e_loss, 'bo', label='Training loss')
+    plt.plot(e_epochs, e_val_loss, 'b', label='Validation loss')
+    plt.title('Training and validation loss')
+    plt.legend()
+
+    plt.show()
+    plt.clf()
+    e_test_loss, e_test_acc = e_to_e_model.evaluate(test_g, steps=20)
+    print('test acc:', e_test_acc)
+    print('test loss:', e_test_loss)
+    pass
+
+
+# Run items
 def main():
     # end_to_end()
-    pre_processing()
+    # pre_processing()
+    with_convolutional_training()
 
 
 # Press the green button in the gutter to run the script.
