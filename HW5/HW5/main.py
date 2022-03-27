@@ -131,7 +131,8 @@ def prepare_data(paths):
     return train_generator, validation_generator, test_generator
 
 
-def main():
+# End to End training decision model with frozen dgg16 weights
+def end_to_end():
     dog_paths, cat_paths, elephant_paths = images_paths()
     base_dir = check_paths(dog_paths, cat_paths, elephant_paths)
     dogs_paths, cats_paths, elephants_paths, ttv_dirs = make_dirs(base_dir)
@@ -177,8 +178,82 @@ def main():
     print('test loss:', test_loss)
 
 
+# deciding after preprocessing with pretrained NN
+def extract_features(conv_base, directory, sample_count, batch_size=20):
+    datagen = ImageDataGenerator(rescale=1./255)
+    features = np.zeros(shape=(sample_count, 4, 4, 512))
+    labels = np.zeros(shape=(sample_count, 3))
+    generator = datagen.flow_from_directory(directory, target_size=(150, 150),
+                                            batch_size=batch_size, class_mode='categorical')
+    i = 0
+    for inputs_batch, labels_batch in generator:
+        features_batch = conv_base.predict(inputs_batch)
+        features[i * batch_size: (i + 1) * batch_size] = features_batch
+        labels[i * batch_size: (i + 1) * batch_size] = labels_batch
+        i += 1
+        if i == 800:
+            print('test')
+        if i * batch_size >= sample_count:
+            break
+    return features, labels
+
+
+def pre_processing():
+    dog_paths, cat_paths, elephant_paths = images_paths()
+    base_dir = check_paths(dog_paths, cat_paths, elephant_paths)
+    dogs_paths, cats_paths, elephants_paths, ttv_dirs = make_dirs(base_dir)
+    parse_files(dogs_paths, cats_paths, elephants_paths, dog_paths, cat_paths, elephant_paths)
+    conv_base = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
+    op = tf.keras.optimizers.RMSprop(lr=2e-5)
+    train_feat, train_labels = extract_features(conv_base, ttv_dirs[0], 800)
+    valid_feat, valid_labels = extract_features(conv_base, ttv_dirs[2], 400)
+    test_feat, test_labels = extract_features(conv_base, ttv_dirs[1], 800)
+    train_feat = np.reshape(train_feat, (800, 4 * 4 * 512))
+    valid_feat = np.reshape(valid_feat, (400, 4 * 4 * 512))
+    test_feat = np.reshape(test_feat, (800, 4 * 4 * 512))
+    decision_model = models.Sequential()
+    decision_model.add(layers.Dense(256, activation='relu', input_dim=4 * 4 * 512))
+    decision_model.add(layers.Dropout(0.5))
+    decision_model.add(layers.Dense(3, activation='softmax'))
+
+    decision_model.compile(optimizer=op, loss='categorical_crossentropy', metrics=['acc'])
+
+    decision_history = decision_model.fit(train_feat, train_labels,
+                                          epochs=30,
+                                          batch_size=20,
+                                          validation_data=(valid_feat, valid_labels))
+
+    d_acc = decision_history.history['acc']
+    d_val_acc = decision_history.history['val_acc']
+    d_loss = decision_history.history['loss']
+    d_val_loss = decision_history.history['val_loss']
+
+    d_epochs = range(len(d_acc))
+
+    plt.plot(d_epochs, d_acc, 'bo', label='Training acc')
+    plt.plot(d_epochs, d_val_acc, 'b', label='Validation acc')
+    plt.title('Training and validation accuracy')
+    plt.legend()
+
+    plt.figure()
+
+    plt.plot(d_epochs, d_loss, 'bo', label='Training loss')
+    plt.plot(d_epochs, d_val_loss, 'b', label='Validation loss')
+    plt.title('Training and validation loss')
+    plt.legend()
+
+    plt.show()
+    plt.clf()
+    test_loss, test_acc = decision_model.evaluate(test_feat, test_labels)
+    print('test acc:', test_acc)
+    print('test loss:', test_loss)
+
+
+def main():
+    # end_to_end()
+    pre_processing()
+
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     main()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
