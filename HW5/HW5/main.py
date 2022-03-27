@@ -96,10 +96,85 @@ def make_dirs(base_dir):
     return dogs_dirs, cats_dirs, elephants_dirs, train_test_val
 
 
+def parse_files(dog_paths, cat_paths, elephant_paths, og_dog, og_cat, og_elephant):
+    ranges = [[1, 401], [401, 601], [601, 1001]]
+    for i in range(3):
+        limits = ranges[i]
+        if len(os.listdir(dog_paths[i])) == 0:
+            fnames = ['{}.jpg'.format(j) for j in range(limits[0], limits[1])]
+            for fname in fnames:
+                src = os.path.join(og_dog, fname)
+                dst = os.path.join(dog_paths[i], fname)
+                shutil.copyfile(src, dst)
+        if len(os.listdir(cat_paths[i])) == 0:
+            fnames = ['{}.jpg'.format(j) for j in range(limits[0], limits[1])]
+            for fname in fnames:
+                src = os.path.join(og_cat, fname)
+                dst = os.path.join(cat_paths[i], fname)
+                shutil.copyfile(src, dst)
+        if len(os.listdir(elephant_paths[i])) == 0:
+            fnames = ['{}.jpg'.format(j) for j in range(limits[0], limits[1])]
+            for fname in fnames:
+                src = os.path.join(og_elephant, fname)
+                dst = os.path.join(elephant_paths[i], fname)
+                shutil.copyfile(src, dst)
+
+
+def prepare_data(paths):
+    datagen = ImageDataGenerator(rescale=1./255)
+    train_generator = datagen.flow_from_directory(
+        paths[0], target_size=(150, 150), batch_size=20, class_mode="categorical")
+    validation_generator = datagen.flow_from_directory(
+        paths[2], target_size=(150, 150), batch_size=20, class_mode="categorical")
+    test_generator = datagen.flow_from_directory(
+        paths[1], target_size=(150, 150), batch_size=20, class_mode="categorical")
+    return train_generator, validation_generator, test_generator
+
+
 def main():
-    dogs_paths, cats_paths, elephants_paths = images_paths()
-    base_dir = check_paths(dogs_paths, cats_paths, elephants_paths)
-    dog_paths, cat_paths, elephant_paths, ttv_dirs = make_dirs(base_dir)
+    dog_paths, cat_paths, elephant_paths = images_paths()
+    base_dir = check_paths(dog_paths, cat_paths, elephant_paths)
+    dogs_paths, cats_paths, elephants_paths, ttv_dirs = make_dirs(base_dir)
+    parse_files(dogs_paths, cats_paths, elephants_paths, dog_paths, cat_paths, elephant_paths)
+    train_g, valid_g, test_g = prepare_data(ttv_dirs)
+    # Preparing model
+    conv_base = VGG16(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
+    op = tf.keras.optimizers.RMSprop(lr=2e-5)
+    model = models.Sequential()
+    model.add(conv_base)
+    model.add(layers.Flatten())
+    model.add(layers.Dense(256, activation='relu'))
+    model.add(layers.Dense(3, activation='softmax'))
+    conv_base.trainable = False
+    model.compile(optimizer=op, loss='categorical_crossentropy', metrics=['acc'])
+    # Display results
+    history = model.fit(train_g, steps_per_epoch=20, epochs=7,
+                        validation_data=valid_g, validation_steps=10, verbose=2)
+    acc = history.history['acc']
+    val_acc = history.history['val_acc']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+
+    epochs = range(len(acc))
+
+    plt.plot(epochs, acc, 'bo', label='Training Acc')
+    plt.plot(epochs, val_acc, 'b', label='Validation_Acc')
+    plt.title('Training Validation Accuracy')
+    plt.legend()
+
+    plt.figure()
+
+    plt.plot(epochs, loss, 'bo', label='Training Loss')
+    plt.plot(epochs, val_loss, 'b', label='Validation Loss')
+    plt.title('Training Validation Loss')
+    plt.legend()
+
+    plt.show()
+    plt.clf()
+
+    test_loss, test_acc = model.evaluate(test_g, steps=20)
+    print('test acc:', test_acc)
+    print('test loss:', test_loss)
 
 
 # Press the green button in the gutter to run the script.

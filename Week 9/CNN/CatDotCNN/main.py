@@ -146,7 +146,7 @@ def main():
     plt.figure()
 
     plt.plot(epochs, loss, 'bo', label='Training Loss')
-    plt.plot(epochs, val_loss, 'b', label='Validation loss')
+    plt.plot(epochs, val_loss, 'b', label='Validation Loss')
     plt.title('Training Validation Loss')
     plt.legend()
 
