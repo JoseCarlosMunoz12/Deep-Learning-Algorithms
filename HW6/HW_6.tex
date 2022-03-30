@@ -10,7 +10,9 @@
 \usepackage{lettrine} 
 \usepackage{tikz}  
 \usepackage{color} 
- \usetikzlibrary{shapes, arrows, calc, arrows.meta, fit, positioning} % these are the parameters passed to the library to create the node graphs  
+\usepackage{xcolor}
+\usetikzlibrary{shapes, arrows, calc, arrows.meta, fit, positioning} % these are the parameters passed to the library to create the node graphs  
+\tikzset{>=latex} % for LaTeX arrow head
 \tikzset{  
     -Latex,auto,node distance =0.6 cm and 1.3 cm, thick,% node distance is the distance between one node to other, where 1.5cm is the length of the edge between the nodes  
     state/.style ={ellipse, draw, minimum width = 0.9 cm}, % the minimum width is the width of the ellipse, which is the size of the shape of vertex in the node graph  
@@ -18,6 +20,10 @@
     bidirected/.style={Latex-Latex,dashed}, % it is the edge having two directions  
     el/.style = {inner sep=2.5pt, align=right, sloped}  
 }  
+\colorlet{mydarkblue}{blue!40!black}
+\tikzstyle{connect}=[thick,mydarkblue] %,line cap=round
+\tikzstyle{connect arrow}=[-{Latex[length=4,width=3.5]},thick,mydarkblue,shorten <=0.5,shorten >=1]
+\usepackage[outline]{contour} % glow around text
 \setlength{\parskip}{12pt}
 \title{Home Work 6 Undergraduate}
 \date{\today}
@@ -48,38 +54,13 @@ The computation graph of the RNN cell is as follows
 \newcommand{\outputnum}{1} 
 \begin{center}
 \begin{tikzpicture} 
-% Input Layer
-    \node[circle, 
-        minimum size = 6mm,
-        fill=orange!30] (Input-1) at (0,-1) {$x_1$};
-    \node[circle, 
-        minimum size = 6mm,
-        fill=orange!30] (Input-2) at (0,-3) {$x_2$};
+% Input Value
+\node[circle,  minimum size = 6mm, fill=orange!30] (Input-1) at (-2.5,-1) {$\vec{X}_i$};
 % Hidden Layer
-\node[circle, 
-        minimum size = 6mm,
-        fill=teal!50,
-        yshift=(2 - 2)*5 mm
-    ] (Hidden-1) at (2.5,-1) {$C$};
-\node[circle, 
-        minimum size = 6mm,
-        fill=teal!50,
-        yshift=(2 -2) *5 mm
-    ] (Hidden-2) at (2.5,-3) {$D$};
-% Output Layer
-    \node[circle, 
-        minimum size = 6mm,
-        fill=purple!50,
-        yshift=(1 - 2)*5 mm
-    ] (Output-1) at (5,-1.5) {$E$}; 
+\node[circle,  minimum size = 6mm, fill=teal!50, yshift=(2 - 2)*5 mm ] (Hidden-1) at (2.5,0) {$C$};
 % Connect neurons In-Hidden
-\draw[->, shorten >=1pt] (Input-1) -- (Hidden-1)node[midway,above left] {$w_1$};
-\draw[->, shorten >=1pt] (Input-1) -- (Hidden-2)node[midway,above left] {$w_2$};
-\draw[->, shorten >=1pt] (Input-2) -- (Hidden-1)node[midway,below left] {$w_3$};
-\draw[->, shorten >=1pt] (Input-2) -- (Hidden-2)node[midway,below left] {$w_4$};
-% Connect neurons Hidden-Out
-\draw[->, shorten >=1pt] (Hidden-1) -- (Output-1)node[midway,above] {$w_5$};
-\draw[->, shorten >=1pt] (Hidden-2) -- (Output-1)node[midway,above] {$w_6$};
+\draw[connect,white,line width=1.2] (Input-1) -- (Hidden-1);
+\draw[connect](Input-1) -- (Hidden-1)node[pos=0.50] {\contour{white}{reshape}};
 \end{tikzpicture}
 \end{center}
 
