@@ -5,7 +5,7 @@
 \usepackage{blindtext}
 \usepackage{titling}
 \usepackage{amssymb}
-\usepackage{amsmath}
+\usepackage{listofitems,amsmath}
 \usepackage{listings}
 \usepackage{lettrine} 
 \usepackage{tikz}  
@@ -35,9 +35,52 @@
 \end{center}
 %===============================
 \section*{1}
-\par The RNN would most likely suffer from vanishin gradient. This is because
+The RNN would most likely suffer from vanishin gradient. While the transformation of the function is 3.5, the derivative of the sigmoid activation is always less than 0.25. When doing back propogation, the value between these numbers is less than 1. So , in a Recurrent network, it will be dramatically go small. So this RNN will suffer from vanishing gadient.
 \section*{2}
-
+The rule is that spectral radius times the activation function highest value to be as close to one. Since, we know that the value can blow up 8 times high, we can set the spectral radius to a $\frac{1}{8}$. So that they both multiply to be at most 1
 \section*{3}
+The computation graph of the RNN cell is as follows
+% Input layer neurons'number
+\newcommand{\inputnum}{2}  
+% Hidden layer neurons'number
+\newcommand{\hiddennum}{2}   
+% Output layer neurons'number
+\newcommand{\outputnum}{1} 
+\begin{center}
+\begin{tikzpicture} 
+% Input Layer
+    \node[circle, 
+        minimum size = 6mm,
+        fill=orange!30] (Input-1) at (0,-1) {$x_1$};
+    \node[circle, 
+        minimum size = 6mm,
+        fill=orange!30] (Input-2) at (0,-3) {$x_2$};
+% Hidden Layer
+\node[circle, 
+        minimum size = 6mm,
+        fill=teal!50,
+        yshift=(2 - 2)*5 mm
+    ] (Hidden-1) at (2.5,-1) {$C$};
+\node[circle, 
+        minimum size = 6mm,
+        fill=teal!50,
+        yshift=(2 -2) *5 mm
+    ] (Hidden-2) at (2.5,-3) {$D$};
+% Output Layer
+    \node[circle, 
+        minimum size = 6mm,
+        fill=purple!50,
+        yshift=(1 - 2)*5 mm
+    ] (Output-1) at (5,-1.5) {$E$}; 
+% Connect neurons In-Hidden
+\draw[->, shorten >=1pt] (Input-1) -- (Hidden-1)node[midway,above left] {$w_1$};
+\draw[->, shorten >=1pt] (Input-1) -- (Hidden-2)node[midway,above left] {$w_2$};
+\draw[->, shorten >=1pt] (Input-2) -- (Hidden-1)node[midway,below left] {$w_3$};
+\draw[->, shorten >=1pt] (Input-2) -- (Hidden-2)node[midway,below left] {$w_4$};
+% Connect neurons Hidden-Out
+\draw[->, shorten >=1pt] (Hidden-1) -- (Output-1)node[midway,above] {$w_5$};
+\draw[->, shorten >=1pt] (Hidden-2) -- (Output-1)node[midway,above] {$w_6$};
+\end{tikzpicture}
+\end{center}
 
 \end{document}
