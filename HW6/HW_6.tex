@@ -52,16 +52,29 @@ The computation graph of the RNN cell is as follows
 \newcommand{\hiddennum}{2}   
 % Output layer neurons'number
 \newcommand{\outputnum}{1} 
+\begin{figure}[htb]
 \begin{center}
+\resizebox{1\textwidth}{!}{
 \begin{tikzpicture} 
-% Input Value
-\node[circle,  minimum size = 6mm, fill=orange!30] (Input-1) at (-2.5,-1) {$\vec{X}_i$};
-% Hidden Layer
-\node[circle,  minimum size = 6mm, fill=teal!50, yshift=(2 - 2)*5 mm ] (Hidden-1) at (2.5,0) {$C$};
-% Connect neurons In-Hidden
-\draw[connect,white,line width=1.2] (Input-1) -- (Hidden-1);
-\draw[connect](Input-1) -- (Hidden-1)node[pos=0.50] {\contour{white}{reshape}};
-\end{tikzpicture}
-\end{center}
+\node[circle,  minimum size = 6mm, fill=orange!30] (ht1) at (2.5, -2) {$h_{t-1}$};\node[circle,  minimum size = 6mm, fill=orange!30] (ht1p) at (7.5,-2) {$h*_{t-1}$};\node[circle,  minimum size = 6mm, fill=orange!30] (wyh) at (12.5, -2) {$W_{yh}$};\node[circle,  minimum size = 6mm, fill=orange!30] (wyht) at (15,-2) {$W_{yh}^{T}$};
+\node[circle,  minimum size = 6mm, fill=orange!30] (whh) at (0,0) {$W_{hh}$};\node[circle,  minimum size = 6mm, fill=orange!30] (whht) at (2.5,0) {$W_{hh}^{T}$};
+\node[circle,  minimum size = 6mm, fill=orange!30] (wxh) at (0,-4) {$W_{xh}$};\node[circle,  minimum size = 6mm, fill=orange!30] (wxht) at (2.5,-4) {$W_{xh}^{T}$};\node[circle,  minimum size = 6mm, fill=orange!30] (xp) at (7.5,-4) {$X*$};\node[circle,  minimum size = 6mm, fill=orange!30] (z) at (12.5,-4) {$z$};\node[circle,  minimum size = 6mm, fill=orange!30] (h) at (15,-4) {$h_{t}$};\node[circle,  minimum size = 6mm, fill=orange!30] (o) at (20,-4) {$o$};\node[circle,  minimum size = 6mm, fill=orange!30] (y) at (22.5,-4) {$\hat{y}$};
+\node[circle,  minimum size = 6mm, fill=orange!30] (x) at (2.5,-6) {$\vec{X}_{i}$};\node[circle,  minimum size = 6mm, fill=orange!30] (b) at (7.5,-6) {$b$};
 
+\node (1) at (5,-2) {matmul};
+\node (2) at (5,-4) {matmul};
+\node (3) at (10,-4) {sum};
+\node (4) at (17.5,-4) {matmul};
+
+\draw[connect](whh)--(whht)node[pos=0.5]{Transpose};\draw[connect](wxh)--(wxht)node[pos=0.5]{Transpose};\draw[connect](wyh)--(wyht)node[pos=0.5]{Transpose};
+\draw[connect](o)--(y)node[pos=0.5]{softmax};
+\draw[connect](whht)--(1);\draw[connect](ht1)--(1);\draw[connect](whht)--(1);\draw[connect](1)--(ht1p);
+\draw[connect](wxht)--(2);\draw[connect](x)--(2);\draw[connect](2)--(xp);\draw[connect](1)--(ht1p);
+\draw[connect](ht1p)--(3);\draw[connect](xp)--(3);\draw[connect](3)--(z);\draw[connect](b)--(3);
+\draw[connect](z)--(h)node[pos=0.5]{Tanh};
+\draw[connect](wyht)--(4);\draw[connect](h)--(4);\draw[connect](4)--(o);
+\end{tikzpicture}
+}
+\end{center}
+ \end{figure}
 \end{document}
