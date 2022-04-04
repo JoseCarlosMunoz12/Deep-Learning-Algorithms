@@ -98,6 +98,20 @@ def normalize_reformat_prepare(dataset):
     return reframed
 
 
+def plot_results(history):
+    plt.close()
+    plt.plot(history.history['mse'], 'r',label='MSE')
+    plt.plot(history.history['val_mse'], 'b', label='Validation MSE')
+    plt.title('Training and validation Mean Squared Error')
+    plt.legend()
+    plt.figure()
+    plt.plot(history.history['loss'], label='train')
+    plt.plot(history.history['val_loss'], label='valid')
+    plt.title('Training and validation Loss (MAE)')
+    plt.legend()
+    plt.show()
+
+
 def main():
     dataset = loadfile()
     plot_data(dataset)
@@ -107,21 +121,32 @@ def main():
     n_train_hours = int(round(len(values)/3))
     n_valid_hours = int(round(2 * len(values)/3))
     train = values[: n_train_hours, :]
-    valid = values[n_valid_hours:, :]
+    valid = values[n_train_hours:n_valid_hours, :]
     test = values[n_valid_hours:, :]
     # split dat into training input, validation output and later testing input
-    train_X, train_Y = train[:, :-1], train[:, -1]
-    valid_X, valid_Y = valid[:, :-1], valid[:, -1]
-    test_X, test_Y = test[:, :-1], test[:, -1]
+    train_x, train_y = train[:, :-1], train[:, -1]
+    valid_x, valid_y = valid[:, :-1], valid[:, -1]
+    test_x, test_y = test[:, :-1], test[:, -1]
     # reshape input to be 3D[samples, timesteps, features]
-    train_X = train_X.reshape((train_X.shape[0], 1, train_X.shape[1]))
-    valid_X = valid_X.reshape((valid_X.shape[0], 1, valid_X.shape[1]))
-    test_X = test_X.reshape((test_X.shape[0], 1, test_X.shape[1]))
+    train_x = train_x.reshape((train_x.shape[0], 1, train_x.shape[1]))
+    valid_x = valid_x.reshape((valid_x.shape[0], 1, valid_x.shape[1]))
+    test_x = test_x.reshape((test_x.shape[0], 1, test_x.shape[1]))
     # Display shape of models
-    print(train_X.shape, train_Y.shape)
-    print(valid_X.shape, valid_Y.shape)
-    print(test_X.shape, test_Y.shape)
-
+    print(train_x.shape, train_y.shape)
+    print(valid_x.shape, valid_y.shape)
+    print(test_x.shape, test_y.shape)
+    # make model
+    model = models.Sequential()
+    print(train_x.shape[0])
+    print(train_x.shape[1])
+    print(train_x.shape[2])
+    model.add(layers.LSTM(50, input_shape=(train_x.shape[1], train_x.shape[2])))
+    model.add(layers.Dense(1))
+    model.compile(loss='mae', optimizer='adam', metrics=['mse'])
+    # fit network
+    history = model.fit(train_x, train_y, epochs=50, batch_size=96, validation_data=(valid_x, valid_y), verbose=2,
+                        shuffle=False)
+    plot_results(history)
 
 
 if __name__ == '__main__':
