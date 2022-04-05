@@ -136,10 +136,10 @@ def main():
     print(valid_x.shape, valid_y.shape)
     print(test_x.shape, test_y.shape)
     # make model
-    model = models.Sequential()
     print(train_x.shape[0])
     print(train_x.shape[1])
     print(train_x.shape[2])
+    model = models.Sequential()
     model.add(layers.LSTM(50, input_shape=(train_x.shape[1], train_x.shape[2])))
     model.add(layers.Dense(1))
     model.compile(loss='mae', optimizer='adam', metrics=['mse'])
