@@ -10,6 +10,9 @@ from keras import layers
 from keras import optimizers
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import MinMaxScaler
+from math import  sqrt
+from sklearn.metrics import  mean_squared_error
+from numpy import concatenate
 
 try:
     from google.colab import drive
@@ -95,7 +98,7 @@ def normalize_reformat_prepare(dataset):
     reframed = series_to_supervised(scaled, 1, 1)
     reframed.drop(reframed.columns[[9, 10, 11, 12, 13, 14, 15]], axis=1, inplace=True)
     print(reframed.head())
-    return reframed
+    return reframed, scaler
 
 
 def plot_results(history):
@@ -115,9 +118,9 @@ def plot_results(history):
 def main():
     dataset = loadfile()
     plot_data(dataset)
-    reframed = normalize_reformat_prepare(dataset)
+    reframed, scaler  = normalize_reformat_prepare(dataset)
     # prepare data
-    values = reframed.values
+    values= reframed.values
     n_train_hours = int(round(len(values)/3))
     n_valid_hours = int(round(2 * len(values)/3))
     train = values[: n_train_hours, :]
@@ -147,6 +150,22 @@ def main():
     history = model.fit(train_x, train_y, epochs=50, batch_size=96, validation_data=(valid_x, valid_y), verbose=2,
                         shuffle=False)
     plot_results(history)
+    # seeing results of the data
+    y_hat = model.predict(test_x)
+    rmse0 = sqrt(mean_squared_error(test_y,y_hat))
+    test_x = test_x.reshape((test_x.shape[0], test_x.shape[2]))
+    # invert scaling for forecast
+    inv_y_hat = concatenate((y_hat, test_x[:, 1:]), axis=1)
+    inv_y_hat = scaler.inverse_transform(inv_y_hat)
+    inv_y_hat = inv_y_hat[:, 0]
+    # invert scaling for actual
+    test_y = test_y.reshape((len(test_y), 1))
+    inv_y = concatenate((test_y, test_x[:, 1:]), axis=1)
+    inv_y = scaler.inverse_transform(inv_y)
+    inv_y = inv_y[:, 0]
+    rmse = sqrt(mean_squared_error(inv_y, inv_y_hat))
+    print('Test RMSE scaled: %.3f' % rmse0)
+    print('Test RMSE absolute: %.3f' % rmse)
 
 
 if __name__ == '__main__':
