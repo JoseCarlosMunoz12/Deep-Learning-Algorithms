@@ -24,12 +24,12 @@ def images_paths():
     if not IN_COLAB:
         original_dataset_dir_dogs = os.getcwd() + "\\Images\\PetImages\\Dog"
         original_dataset_dir_cats = os.getcwd() + "\\Images\\PetImages\\Cat"
-        original_dataset_dir_elephants = os.getcwd() + "\\Images\\PetImages\\Elephants"
+        original_dataset_dir_elephants = os.getcwd() + "\\Images\\PetImages\\Elephant"
     else:
         drive.mount()
         original_dataset_dir_dogs = os.getcwd() + "\\Images\\PetImages\\Dog"
         original_dataset_dir_cats = os.getcwd() + "\\Images\\PetImages\\Cat"
-        original_dataset_dir_elephants = os.getcwd() + "\\Images\\PetImages\\Elephants"
+        original_dataset_dir_elephants = os.getcwd() + "\\Images\\PetImages\\Elephant"
     return original_dataset_dir_dogs, original_dataset_dir_cats,  original_dataset_dir_elephants
 
 
@@ -177,6 +177,7 @@ def end_to_end():
     plt.clf()
 
     test_loss, test_acc = model.evaluate(test_g, steps=20)
+    print('End to End Results:')
     print('test acc:', test_acc)
     print('test loss:', test_loss)
 
@@ -246,6 +247,7 @@ def pre_processing():
     plt.show()
     plt.clf()
     test_loss, test_acc = decision_model.evaluate(test_feat, test_labels)
+    print('Pre Processing Results:')
     print('test acc:', test_acc)
     print('test loss:', test_loss)
 
@@ -303,15 +305,18 @@ def with_convolutional_training(set_trainable=False):
     plt.show()
     plt.clf()
     e_test_loss, e_test_acc = e_to_e_model.evaluate(test_g, steps=20)
+    print('Convolutional Training Results:')
     print('test acc:', e_test_acc)
     print('test loss:', e_test_loss)
 
 
 # Run items
 def main():
-    end_to_end()
-    pre_processing()
-    with_convolutional_training()
+    end_to_end()  # Results Acc: 0.957499 Loss: 0.11944698
+    pre_processing()  # Results Acc: 0.9549999 Loss: 0.2544656
+    with_convolutional_training()  # Results Acc: 0.9549999833106995 Loss:0.148551806807518
+    # The method chosen for this AI training will be the End to End metho as it gave us the lowest Loss and highest
+    # accuracy
 
 
 # Press the green button in the gutter to run the script.
