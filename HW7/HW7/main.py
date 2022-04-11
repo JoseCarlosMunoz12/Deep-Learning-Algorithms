@@ -41,13 +41,15 @@ def loadfile():
     if not os.path.exists(dst):
         print('copying file and reformatting')
         copy = True
-        src = os.path.join(data_dir, 'raw_pollution.csv')
+        src = os.path.join(data_dir, 'pollution_for_students.csv')
         dataset = read_csv(src, parse_dates=[['year', 'month', 'day', 'hour']],
                            index_col=0, date_parser=parse)
         dataset.drop('No', axis=1, inplace=True)
-        dataset.columns = ['pollution', 'dew', 'temp', 'press', 'wnd_dir', 'wnd_spd', 'snow', 'rain']
+        dataset.columns = ['PM2.5', 'PM10', 'SO2', 'NO2', 'CO', 'O3',
+                           'TEMP', 'PRES', 'DEWP', 'RAIN', 'wd', 'WSPM',
+                           'station']
         dataset.index.name = 'date'
-        dataset['pollution'].fillna(0, inplace=True)
+        dataset['PM2.5'].fillna(0, inplace=True)
         dataset = dataset[24:]
         dataset.to_csv(dst)
     if not copy:
@@ -58,8 +60,8 @@ def loadfile():
 
 def main():
     # Loading file
-    print('test')
-    pass
+    dataset = loadfile()
+    print(dataset)
 
 
 if __name__ == '__main__':
