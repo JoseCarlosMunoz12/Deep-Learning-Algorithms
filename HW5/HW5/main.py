@@ -313,9 +313,9 @@ def with_convolutional_training(set_trainable=False):
 # Run items
 def main():
     end_to_end()  # Results Acc: 0.957499 Loss: 0.11944698
-    pre_processing()  # Results Acc: 0.9549999 Loss: 0.2544656
-    with_convolutional_training()  # Results Acc: 0.9549999833106995 Loss:0.148551806807518
-    # The method chosen for this AI training will be the End to End metho as it gave us the lowest Loss and highest
+    # pre_processing()  # Results Acc: 0.9549999 Loss: 0.2544656
+    # with_convolutional_training()  # Results Acc: 0.9549999833106995 Loss:0.148551806807518
+    # The method chosen for this AI training will be the End to End method as it gave us the lowest Loss and highest
     # accuracy
 
 
