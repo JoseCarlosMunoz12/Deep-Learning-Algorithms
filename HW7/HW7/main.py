@@ -92,7 +92,7 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
     return agg
 
 
-def normalize_reformat_prepare(dataset, n_in=1, n_out=1):
+def normalize_reformat_prepare(dataset, n_features, n_hours, n_in=1, n_out=1):
     values = dataset.values
     encoder = LabelEncoder()
     values[:, 10] = encoder.fit_transform(values[:, 10])
@@ -101,13 +101,17 @@ def normalize_reformat_prepare(dataset, n_in=1, n_out=1):
     scaler = MinMaxScaler(feature_range=(0, 1))
     scaled = scaler.fit_transform(values)
     reframed = series_to_supervised(scaled, n_in, n_out)
-    reframed.drop(reframed.columns[[9, 10, 11, 12, 13, 14, 15]], axis=1, inplace=True)
+    cols = []
+    n_obs = n_hours * n_features
+    for j in range( n_obs, n_obs + n_features):
+        cols.append(j)
+    reframed.drop(reframed.columns[cols], axis=1, inplace=True)
     print(reframed.head())
     return reframed, scaler
 
 
-def train_model(dataset, title, n_in=1, n_out=1):
-    reframed, scaler = normalize_reformat_prepare(dataset, n_in, n_out)
+def train_model(dataset, title, n_features, n_hours, n_in=1, n_out=1):
+    reframed, scaler = normalize_reformat_prepare(dataset, n_features, n_hours, n_in, n_out)
     # prepare data
     values = reframed.values
     n_train_hours = int(round(len(values)/3))
@@ -160,7 +164,7 @@ def train_model(dataset, title, n_in=1, n_out=1):
 def main():
     # Loading file
     dataset = loadfile()
-    train_model(dataset, 'Two Day Prediction', 1, 1)
+    train_model(dataset, 'Two Day Prediction', 12, 3, 1, 1)
 
 
 if __name__ == '__main__':
