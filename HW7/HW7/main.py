@@ -92,7 +92,7 @@ def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
     return agg
 
 
-def normalize_reformat_prepare(dataset, n_features, n_hours, n_in=1, n_out=1):
+def normalize_reformat_prepare(dataset, n_features, n_in=1, n_out=1):
     values = dataset.values
     encoder = LabelEncoder()
     values[:, 10] = encoder.fit_transform(values[:, 10])
@@ -102,16 +102,15 @@ def normalize_reformat_prepare(dataset, n_features, n_hours, n_in=1, n_out=1):
     scaled = scaler.fit_transform(values)
     reframed = series_to_supervised(scaled, n_in, n_out)
     cols = []
-    n_obs = n_hours * n_features
-    for j in range( n_obs, n_obs + n_features):
-        cols.append(j)
+    i = -1
+    for j in range(n_features - 1):
+        cols.append(i - j)
     reframed.drop(reframed.columns[cols], axis=1, inplace=True)
-    print(reframed.head())
     return reframed, scaler
 
 
-def train_model(dataset, title, n_features, n_hours, n_in=1, n_out=1):
-    reframed, scaler = normalize_reformat_prepare(dataset, n_features, n_hours, n_in, n_out)
+def train_model(dataset, title, n_features, n_in=1, n_out=1):
+    reframed, scaler = normalize_reformat_prepare(dataset, n_features, n_in, n_out)
     # prepare data
     values = reframed.values
     n_train_hours = int(round(len(values)/3))
@@ -124,17 +123,14 @@ def train_model(dataset, title, n_features, n_hours, n_in=1, n_out=1):
     valid_x, valid_y = valid[:, :-1], valid[:, -1]
     test_x, test_y = test[:, :-1], test[:, -1]
     # reshape input to be 3D[samples, timesteps, features]
-    train_x = train_x.reshape((train_x.shape[0], 1, train_x.shape[1]))
-    valid_x = valid_x.reshape((valid_x.shape[0], 1, valid_x.shape[1]))
-    test_x = test_x.reshape((test_x.shape[0], 1, test_x.shape[1]))
+    train_x = train_x.reshape((train_x.shape[0], n_in, n_features))
+    valid_x = valid_x.reshape((valid_x.shape[0], n_in, n_features))
+    test_x = test_x.reshape((test_x.shape[0], n_in, n_features))
     # Display shape of models
     print(train_x.shape, train_y.shape)
     print(valid_x.shape, valid_y.shape)
     print(test_x.shape, test_y.shape)
     # make model
-    print(train_x.shape[0])
-    print(train_x.shape[1])
-    print(train_x.shape[2])
     model = models.Sequential()
     model.add(layers.LSTM(50, input_shape=(train_x.shape[1], train_x.shape[2])))
     model.add(layers.Dense(1))
@@ -142,29 +138,34 @@ def train_model(dataset, title, n_features, n_hours, n_in=1, n_out=1):
     # fit network
     history = model.fit(train_x, train_y, epochs=50, batch_size=96, validation_data=(valid_x, valid_y), verbose=2,
                         shuffle=False)
-    plot_results(history)
+    # plot_results(history)
     # seeing results of the data
     y_hat = model.predict(test_x)
-    rmse0 = sqrt(mean_squared_error(test_y,y_hat))
-    test_x = test_x.reshape((test_x.shape[0], test_x.shape[2]))
+    rmse0 = sqrt(mean_squared_error(test_y, y_hat))
+    size = n_in * n_features
+    test_x = test_x.reshape((test_x.shape[0], size))
     # invert scaling for forecast
-    inv_y_hat = concatenate((y_hat, test_x[:, 1:]), axis=1)
+    end = -1 * (n_features - 1)
+    inv_y_hat = concatenate((y_hat, test_x[:, end:]), axis=1)
     inv_y_hat = scaler.inverse_transform(inv_y_hat)
     inv_y_hat = inv_y_hat[:, 0]
     # invert scaling for actual
     test_y = test_y.reshape((len(test_y), 1))
-    inv_y = concatenate((test_y, test_x[:, 1:]), axis=1)
+    inv_y = concatenate((test_y, test_x[:, end:]), axis=1)
     inv_y = scaler.inverse_transform(inv_y)
     inv_y = inv_y[:, 0]
     rmse = sqrt(mean_squared_error(inv_y, inv_y_hat))
+    print('%s Results' % title)
     print('Test RMSE scaled: %.3f' % rmse0)
     print('Test RMSE absolute: %.3f' % rmse)
+    return 1
 
 
 def main():
     # Loading file
     dataset = loadfile()
-    train_model(dataset, 'Two Day Prediction', 12, 3, 1, 1)
+    train_model(dataset, 'Two Day Prediction', 13, 48)
+    train_model(dataset, 'Three Day Prediction', 13, 72)
 
 
 if __name__ == '__main__':

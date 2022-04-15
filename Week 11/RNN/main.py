@@ -96,7 +96,8 @@ def normalize_reformat_prepare(dataset):
     scaler = MinMaxScaler(feature_range=(0, 1))
     scaled = scaler.fit_transform(values)
     reframed = series_to_supervised(scaled, 1, 1)
-    reframed.drop(reframed.columns[[9, 10, 11, 12, 13, 14, 15]], axis=1, inplace=True)
+    # reframed.drop(reframed.columns[[9, 10, 11, 12, 13, 14, 15]], axis=1, inplace=True)
+    reframed.drop(reframed.columns[[-1, -2, -3, -4, -5, -6, -7]], axis=1, inplace=True)
     print(reframed.head())
     return reframed, scaler
 
@@ -118,7 +119,7 @@ def plot_results(history):
 def main():
     dataset = loadfile()
     plot_data(dataset)
-    reframed, scaler  = normalize_reformat_prepare(dataset)
+    reframed, scaler = normalize_reformat_prepare(dataset)
     # prepare data
     values= reframed.values
     n_train_hours = int(round(len(values)/3))
